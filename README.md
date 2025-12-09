@@ -20,5 +20,12 @@ git commit -m "описание изменений"
 git remote add origin "ссылка на репозиторий"  
 git push origin main
 
+## Project commands
+docker-compose up -d  
+npm run start:dev  
+npm run migrate:up  
+npm run migrate:down
+
+
 
 
