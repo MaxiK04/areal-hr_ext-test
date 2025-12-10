@@ -1,22 +1,8 @@
-import {Global, Module } from '@nestjs/common';
-import { Pool } from 'pg';
+import { Module } from '@nestjs/common';
+import { DatabaseService } from './database.service';
 
-@Global()
 @Module({
-    providers: [
-        {
-            provide: 'PG_POOL',
-            useFactory: () => {
-                return new Pool({
-                    host: 'localhost',
-                    port: 5433,
-                    user: 'postgres',
-                    password: 'qwertyui',
-                    database: 'hr-system',
-                });
-            },
-        },
-    ],
-    exports: ['PG_POOL'],
+    providers: [DatabaseService],
+    exports: [DatabaseService],
 })
 export class DatabaseModule {}

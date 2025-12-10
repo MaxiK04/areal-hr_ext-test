@@ -1,9 +1,11 @@
+version: '3.8'
 
 services:
   postgres:
     image: postgres:17
+    container_name: hr_system_postgres
     environment:
-      POSTGRES_DB: hr_system
+      POSTGRES_DB: hr-system
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: qwertyui
     ports:
