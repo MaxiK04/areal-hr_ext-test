@@ -1,4 +1,4 @@
 export class UpdateDepartmentDto {
-    name?: string;
+    name: string;
     comment?: string;
 }
