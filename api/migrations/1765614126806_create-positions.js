@@ -1,14 +1,31 @@
 exports.up = (pgm) => {
-    pgm.sql(`
-    CREATE TABLE positions (
-      position_id SERIAL PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      deleted_at TIMESTAMPTZ NULL
-    );
-  `);
+    pgm.createTable('positions', {
+        position_id: {
+            type: 'SERIAL',
+            primaryKey: true
+        },
+        name: {
+            type: 'VARCHAR(255)',
+            notNull: true
+        },
+        created_at: {
+            type: 'TIMESTAMPTZ',
+            notNull: true,
+            default: pgm.func('CURRENT_TIMESTAMP')
+        },
+        updated_at: {
+            type: 'TIMESTAMPTZ',
+            notNull: true,
+            default: pgm.func('CURRENT_TIMESTAMP')
+        },
+        deleted_at: {
+            type: 'TIMESTAMPTZ'
+        }
+    });
+
+    pgm.createIndex('positions', 'name');
 };
 
 exports.down = (pgm) => {
-    pgm.sql(`DROP TABLE positions;`);
+    pgm.dropTable('positions');
 };
