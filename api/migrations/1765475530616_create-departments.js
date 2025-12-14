@@ -6,7 +6,9 @@ exports.up = (pgm) => {
     },
     organization_id: {
       type: 'INTEGER',
-      notNull: true
+      notNull: true,
+      references: 'organizations(id_organization)',
+      onDelete: 'RESTRICT'
     },
     name: {
       type: 'VARCHAR(255)',
@@ -31,28 +33,12 @@ exports.up = (pgm) => {
     deleted_at: {
       type: 'TIMESTAMPTZ'
     }
+    },{
+    ifNotExists: true
   });
 
 
-  pgm.addConstraint('departments', 'fk_departments_organization', {
-    foreignKeys: {
-      columns: 'organization_id',
-      references: 'organizations(id)',
-      onDelete: 'RESTRICT'
-    }
-  });
 
-  pgm.addConstraint('departments', 'fk_departments_parent', {
-    foreignKeys: {
-      columns: 'parent_id',
-      references: 'departments(id_department)',
-      onDelete: 'RESTRICT'
-    }
-  });
-
-  pgm.createIndex('departments', 'organization_id');
-  pgm.createIndex('departments', 'parent_id');
-  pgm.createIndex('departments', 'name');
 };
 
 exports.down = (pgm) => {

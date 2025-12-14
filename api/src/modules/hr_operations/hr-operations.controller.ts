@@ -1,87 +1,43 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Put,
-    Delete,
-    Body,
-    Param,
-    ParseIntPipe,
-    BadRequestException,
-    NotFoundException,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { HrOperationsService } from './hr-operations.service';
 import { CreateHrOperationDto } from './dto/create-hr-operation.dto';
-import { UpdateHrOperationDto } from './dto/update-hr-operation.dto';
-import { CreateHrOperationSchema } from './schemas/create-hr-operation.schema';
-import { UpdateHrOperationSchema } from './schemas/update-hr-operation.schema';
 
 @Controller('hr-operations')
 export class HrOperationsController {
     constructor(private readonly hrOperationsService: HrOperationsService) {}
 
+    @Post()
+    create(@Body() createHrOperationDto: CreateHrOperationDto) {
+        return this.hrOperationsService.create(createHrOperationDto);
+    }
+
     @Get()
-    async findAll() {
+    findAll() {
         return this.hrOperationsService.findAll();
     }
 
-    @Get(':id')
-    async findOne(@Param('id', ParseIntPipe) id: number) {
-        const hrOperation = await this.hrOperationsService.findOne(id);
-        if (!hrOperation) {
-            throw new NotFoundException(`HR operation with ID ${id} not found`);
-        }
-        return hrOperation;
-    }
-
     @Get('employee/:employeeId')
-    async findByEmployeeId(
-        @Param('employeeId', ParseIntPipe) employeeId: number,
-    ) {
-        const operations = await this.hrOperationsService.findByEmployeeId(employeeId);
-        if (!operations || operations.length === 0) {
-            throw new NotFoundException(`No HR operations found for employee ${employeeId}`);
-        }
-        return operations;
+    findByEmployeeId(@Param('employeeId') employeeId: string) {
+        return this.hrOperationsService.findByEmployeeId(+employeeId);
     }
 
-    @Post()
-    async create(@Body() createHrOperationDto: CreateHrOperationDto) {
-        const { error, value } =
-            CreateHrOperationSchema.validate(createHrOperationDto);
-
-        if (error) {
-            throw new BadRequestException(`Validation failed: ${error.message}`);
-        }
-
-        return this.hrOperationsService.create(value);
+    @Get('employee/:employeeId/state')
+    getEmployeeState(@Param('employeeId') employeeId: string) {
+        return this.hrOperationsService.getEmployeeCurrentState(+employeeId);
     }
 
-    @Put(':id')
-    async update(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() updateHrOperationDto: UpdateHrOperationDto,
-    ) {
-        const { error, value } =
-            UpdateHrOperationSchema.validate(updateHrOperationDto);
+    @Get(':id')
+    findOne(@Param('id') id: string) {
+        return this.hrOperationsService.findOne(+id);
+    }
 
-        if (error) {
-            throw new BadRequestException(`Validation failed: ${error.message}`);
-        }
-
-        const hrOperation = await this.hrOperationsService.update(id, value);
-        if (!hrOperation) {
-            throw new NotFoundException(`HR operation with ID ${id} not found`);
-        }
-        return hrOperation;
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateHrOperationDto: any) {
+        return this.hrOperationsService.update(+id, updateHrOperationDto);
     }
 
     @Delete(':id')
-    async remove(@Param('id', ParseIntPipe) id: number) {
-        const result = await this.hrOperationsService.remove(id);
-        if (!result) {
-            throw new NotFoundException(`HR operation with ID ${id} not found`);
-        }
-        return { message: `HR operation with ID ${id} deleted successfully` };
+    remove(@Param('id') id: string) {
+        return this.hrOperationsService.remove(+id);
     }
 }

@@ -1,6 +1,6 @@
 export enum EmployeeStatus {
-  ACTIVE = 'active',
-  ON_VACATION = 'vacation',
-  INACTIVE = 'inactive',
-  DISMISSED = 'dismiss'
+  EMPLOYMENT = 'HIRE',
+  DISMISSAL = 'DISMISSAL',
+  TRANSFER = 'TRANSFER',
+  SALARY_CHANGE = 'SALARY_CHANGE'
 }

@@ -5,5 +5,5 @@ export const CreateHrOperationSchema = Joi.object({
     department_id: Joi.number().optional(),
     position_id: Joi.number().optional(),
     set_salary: Joi.number().optional(),
-    type_action: Joi.string().valid('hire', 'transfer', 'salary_change', 'dismissal').required(),
+    type_action: Joi.string().valid('hire', 'dismissal', 'transfer', 'salary_change').required(),
 });

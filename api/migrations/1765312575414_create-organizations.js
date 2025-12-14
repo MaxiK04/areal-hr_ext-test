@@ -22,7 +22,9 @@ exports.up = (pgm) => {
         deleted_at: {
             type: 'timestamp'
         }
-    });
+        },{
+        ifNotExists: true
+        });
 };
 
 exports.down = (pgm) => {

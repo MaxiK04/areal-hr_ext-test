@@ -76,21 +76,21 @@ exports.up = (pgm) => {
         },
         deleted_at: {
             type: 'TIMESTAMPTZ'
-        }
+        },
         user_id: {
             type: 'INTEGER',
-            notNull:true,
+            notNull: true,
             references: 'users(user_id)',
             onDelete: 'SET NULL',
         }
     });
 
+
     pgm.addConstraint('operation', 'fk_operation_employee', {
         foreignKeys: {
             columns: 'employee_id',
-            references: 'employee(id_employee)',
+            references: 'employees(id_employee)',
             onDelete: 'SET NULL'
-        }
         }
     });
 

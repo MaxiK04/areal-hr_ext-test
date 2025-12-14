@@ -5,17 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6af4562a-e967-490d-8182-ac3dfd4ffc0e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/create-hr-operation.dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/update-hr-operation.dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/interfaces/hr-operation.interface.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/schemas/create-hr-operation.schema.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/schemas/update-hr-operation.schema.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/migrations/20251214101151064_add_hr_operations_fields_to_employee.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/migrations/1765312575414_create-organizations.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/1765312575414_create-organizations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/migrations/1765475530616_create-departments.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/1765475530616_create-departments.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/migrations/1765614911021_create-employees.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/1765614911021_create-employees.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/migrations/20251213191857433-create-hr-operations.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/20251213191857433_create-hr-operations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/migrations/20251214101151064-add_hr_operations_fields_to_employee.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/create-hr-operation.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/create-hr-operation.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/update-hr-operation.dto.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/enums/employee-status.enum.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/enums/employee-status.enum.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/schemas/create-hr-operation.schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/schemas/create-hr-operation.schema.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/schemas/update-hr-operation.schema.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +60,7 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "Node.js.1765475530616_create-departments.js.executor": "Run",
     "Node.js.1765623475185_create-files.js.executor": "Debug",
+    "Node.js.20251214101151064_add_hr_operations_fields_to_employee.js.executor": "Run",
     "Node.js.database.module.ts.executor": "Run",
     "Node.js.organizations.service.ts.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -85,15 +93,22 @@
       <recent name="C:\Users\kozlo\OneDrive\Рабочий стол\hr_system\api\src\modules" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.start:dev">
-    <configuration name="1765623475185_create-files.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/api/migrations/1765623475185_create-files.js" working-dir="$PROJECT_DIR$/api/migrations">
-      <method v="2" />
-    </configuration>
+  <component name="RunManager">
     <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/api/package.json" />
       <command value="run" />
       <scripts>
         <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="migrate:down" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/api/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="migrate:down" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
@@ -132,10 +147,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.start:dev" />
+        <item itemvalue="npm.migrate:up" />
+        <item itemvalue="npm.migrate:down" />
         <item itemvalue="npm.start" />
         <item itemvalue="npm.build" />
-        <item itemvalue="Node.js.1765623475185_create-files.js" />
-        <item itemvalue="npm.migrate:up" />
       </list>
     </recent_temporary>
   </component>
@@ -163,7 +178,7 @@
       <workItem from="1765474448017" duration="9433000" />
       <workItem from="1765562301995" duration="1730000" />
       <workItem from="1765613008526" duration="21603000" />
-      <workItem from="1765690105179" duration="5446000" />
+      <workItem from="1765690105179" duration="15815000" />
     </task>
     <servers />
   </component>
