@@ -5,32 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6af4562a-e967-490d-8182-ac3dfd4ffc0e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/api/src/modules/files/dto/create-file.dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/files/files.controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/files/files.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/files/files.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/files/interfaces/file.interface.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/files/schemas/create-file.schema.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/files/schemas/update-file.schema.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/create-hr-operation.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/update-hr-operation.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/interfaces/hr-operation.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/schemas/create-hr-operation.schema.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/schemas/update-hr-operation.schema.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/node_modules/express/History.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/node_modules/express/Readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/api/node_modules/express/Readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/node_modules/express/lib/application.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/node_modules/express/lib/application.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/node_modules/express/lib/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/node_modules/express/lib/request.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/node_modules/express/lib/response.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/node_modules/express/lib/response.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/node_modules/express/lib/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/node_modules/express/lib/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/node_modules/express/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/node_modules/express/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/departments/dto/update-department.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/departments/dto/update-department.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/tsconfig.build.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/tsconfig.build.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/enums/employee-status.enum.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/enums/employee-status.enum.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +68,7 @@
     "npm.migrate:create.executor": "Run",
     "npm.migrate:down.executor": "Run",
     "npm.migrate:up.executor": "Run",
-    "npm.start.executor": "Run",
+    "npm.start.executor": "Debug",
     "npm.start:dev.executor": "Run",
     "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "settings.nodejs",
@@ -100,7 +85,7 @@
       <recent name="C:\Users\kozlo\OneDrive\Рабочий стол\hr_system\api\src\modules" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.start">
+  <component name="RunManager" selected="npm.start:dev">
     <configuration name="1765623475185_create-files.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/api/migrations/1765623475185_create-files.js" working-dir="$PROJECT_DIR$/api/migrations">
       <method v="2" />
     </configuration>
@@ -146,8 +131,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.start" />
         <item itemvalue="npm.start:dev" />
+        <item itemvalue="npm.start" />
         <item itemvalue="npm.build" />
         <item itemvalue="Node.js.1765623475185_create-files.js" />
         <item itemvalue="npm.migrate:up" />
@@ -177,7 +162,8 @@
       <workItem from="1765384014459" duration="9605000" />
       <workItem from="1765474448017" duration="9433000" />
       <workItem from="1765562301995" duration="1730000" />
-      <workItem from="1765613008526" duration="19608000" />
+      <workItem from="1765613008526" duration="21603000" />
+      <workItem from="1765690105179" duration="5446000" />
     </task>
     <servers />
   </component>
