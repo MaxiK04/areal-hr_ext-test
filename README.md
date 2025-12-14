@@ -26,6 +26,12 @@ npm run start:dev
 npm run migrate:up  
 npm run migrate:down
 
-
-
+## Inscturction
+-git clone 'link'  
+-connect db in .env  
+-docker migrate:up  
+-docker compose up  
+-npm run start:dev  
+GO to http:/localhost:3000/'name of module'(for example employees)
+GO to cmd and check CRUD with curl-commands
 
