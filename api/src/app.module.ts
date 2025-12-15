@@ -7,6 +7,7 @@ import { PositionsModule } from './modules/positions/positions.module';
 import { EmployeesModule } from './modules/employees/employees.module';
 import { FilesModule} from './modules/files/files.module';
 import { HrOperationsModule } from './modules/hr_operations/hr-operations.module'
+import { LogsModule } from './modules/logs/logs.module'
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { HrOperationsModule } from './modules/hr_operations/hr-operations.module
     PositionsModule,
     EmployeesModule,
     FilesModule,
-    HrOperationsModule
+    HrOperationsModule,
+    LogsModule
   ],
 })
 export class AppModule {}

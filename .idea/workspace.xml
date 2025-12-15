@@ -5,24 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6af4562a-e967-490d-8182-ac3dfd4ffc0e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/api/migrations/20251214101151064_add_hr_operations_fields_to_employee.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/dto/create-log.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/dto/update-log.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/interfaces/log.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/schemas/create-log.schema.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/schemas/update-log.schema.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/1765312575414_create-organizations.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/1765312575414_create-organizations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/1765475530616_create-departments.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/1765475530616_create-departments.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/1765614911021_create-employees.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/1765614911021_create-employees.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/20251213191857433-create-hr-operations.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/20251213191857433_create-hr-operations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/20251214101151064-add_hr_operations_fields_to_employee.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/create-hr-operation.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/create-hr-operation.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/update-hr-operation.dto.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/enums/employee-status.enum.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/enums/employee-status.enum.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/schemas/create-hr-operation.schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/schemas/create-hr-operation.schema.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/schemas/update-hr-operation.schema.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,35 +46,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Node.js.1765475530616_create-departments.js.executor": "Run",
-    "Node.js.1765623475185_create-files.js.executor": "Debug",
-    "Node.js.20251214101151064_add_hr_operations_fields_to_employee.js.executor": "Run",
-    "Node.js.database.module.ts.executor": "Run",
-    "Node.js.organizations.service.ts.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/kozlo/OneDrive/Рабочий стол/hr_system",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.build.executor": "Run",
-    "npm.migrate:create.executor": "Run",
-    "npm.migrate:down.executor": "Run",
-    "npm.migrate:up.executor": "Run",
-    "npm.start.executor": "Debug",
-    "npm.start:dev.executor": "Run",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "settings.nodejs",
-    "ts.external.directory.path": "C:\\Users\\kozlo\\AppData\\Local\\JetBrains\\IntelliJ IDEA 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Node.js.1765475530616_create-departments.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.1765623475185_create-files.js.executor&quot;: &quot;Debug&quot;,
+    &quot;Node.js.20251214101151064_add_hr_operations_fields_to_employee.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.database.module.ts.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.organizations.service.ts.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/kozlo/OneDrive/Рабочий стол/hr_system&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.build.executor&quot;: &quot;Run&quot;,
+    &quot;npm.migrate:create.executor&quot;: &quot;Run&quot;,
+    &quot;npm.migrate:down.executor&quot;: &quot;Run&quot;,
+    &quot;npm.migrate:up.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start.executor&quot;: &quot;Debug&quot;,
+    &quot;npm.start:dev.executor&quot;: &quot;Run&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\kozlo\\AppData\\Local\\JetBrains\\IntelliJ IDEA 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\kozlo\OneDrive\Рабочий стол\hr_system\" />
@@ -93,7 +84,7 @@
       <recent name="C:\Users\kozlo\OneDrive\Рабочий стол\hr_system\api\src\modules" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="npm.start:dev">
     <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/api/package.json" />
       <command value="run" />
@@ -147,10 +138,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.start:dev" />
+        <item itemvalue="npm.build" />
         <item itemvalue="npm.migrate:up" />
         <item itemvalue="npm.migrate:down" />
         <item itemvalue="npm.start" />
-        <item itemvalue="npm.build" />
       </list>
     </recent_temporary>
   </component>
@@ -178,7 +169,9 @@
       <workItem from="1765474448017" duration="9433000" />
       <workItem from="1765562301995" duration="1730000" />
       <workItem from="1765613008526" duration="21603000" />
-      <workItem from="1765690105179" duration="15815000" />
+      <workItem from="1765690105179" duration="16235000" />
+      <workItem from="1765773613748" duration="473000" />
+      <workItem from="1765774589737" duration="2302000" />
     </task>
     <servers />
   </component>
