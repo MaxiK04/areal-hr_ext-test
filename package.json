@@ -1,14 +1,21 @@
 {
   "dependencies": {
     "@nestjs/config": "^4.0.2",
+    "@nestjs/jwt": "^11.0.2",
+    "@nestjs/passport": "^11.0.5",
+    "bcryptjs": "^3.0.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
     "dotenv": "^17.2.3",
     "joi": "^18.0.2",
     "node-pg-migrate": "^8.0.4",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
     "swagger": "^0.7.5"
   },
   "devDependencies": {
-    "@types/multer": "^2.0.0"
+    "@types/bcryptjs": "^2.4.6",
+    "@types/multer": "^2.0.0",
+    "@types/passport-jwt": "^4.0.1"
   }
 }

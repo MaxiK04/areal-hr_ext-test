@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="6af4562a-e967-490d-8182-ac3dfd4ffc0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/20251215080820618-create-logs.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/20251215080820618_create_logs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/20251215092733177-create_users.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/20251215092733177_create_users.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/logs/logs.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/logs/logs.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/logs/logs.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +163,7 @@
       <workItem from="1765613008526" duration="21603000" />
       <workItem from="1765690105179" duration="16235000" />
       <workItem from="1765773613748" duration="473000" />
-      <workItem from="1765774589737" duration="8239000" />
+      <workItem from="1765774589737" duration="10332000" />
     </task>
     <servers />
   </component>
