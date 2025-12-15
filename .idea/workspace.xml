@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6af4562a-e967-490d-8182-ac3dfd4ffc0e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/dto/create-log.dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/dto/update-log.dto.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/interfaces/log.interface.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.module.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/schemas/create-log.schema.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/schemas/update-log.schema.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.constants.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/users/users.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/users/users.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/users/users.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -171,7 +167,7 @@
       <workItem from="1765613008526" duration="21603000" />
       <workItem from="1765690105179" duration="16235000" />
       <workItem from="1765773613748" duration="473000" />
-      <workItem from="1765774589737" duration="2302000" />
+      <workItem from="1765774589737" duration="3394000" />
     </task>
     <servers />
   </component>
