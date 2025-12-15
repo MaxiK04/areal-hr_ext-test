@@ -1,43 +1,51 @@
 import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { LogsService } from './logs.service';
-import { CreateLogDto } from './dto/create-log.dto';
-import { Log } from './interfaces/log.interface';
 
 @Controller('logs')
 export class LogsController {
     constructor(private readonly logsService: LogsService) {}
 
     @Get()
-    async findAll(): Promise<Log[]> {
+    async findAll() {
         return this.logsService.findAll();
     }
 
     @Get(':id')
-    async findOne(@Param('id') id: string): Promise<Log> {
+    async findOne(@Param('id') id: string) {
         return this.logsService.findOne(+id);
     }
 
     @Get('user/:userId')
-    async findByUserId(@Param('userId') userId: string): Promise<Log[]> {
+    async findByUserId(@Param('userId') userId: string) {
         return this.logsService.findByUserId(+userId);
     }
 
     @Post()
-    async create(@Body() createLogDto: CreateLogDto): Promise<Log> {
-        return this.logsService.create(createLogDto);
+    async create(@Body() body: {
+        userId: number;
+        action: string;
+        what: string;
+        oldValue?: string;
+    }) {
+        return this.logsService.log(
+            body.userId,
+            body.action,
+            body.what,
+            body.oldValue
+        );
     }
 
     @Put(':id')
     async update(
         @Param('id') id: string,
-        @Body() updateData: Partial<Log>
-    ): Promise<Log> {
+        @Body() updateData: any
+    ) {
         return this.logsService.update(+id, updateData);
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string): Promise<{ success: boolean }> {
-        const deleted = await this.logsService.softDelete(+id);
+    async delete(@Param('id') id: string) {
+        const deleted = await this.logsService.delete(+id);
         return { success: deleted };
     }
 }

@@ -7,5 +7,6 @@ import { DatabaseModule } from '../../database/database.module';
     imports: [DatabaseModule],
     controllers: [LogsController],
     providers: [LogsService],
+    exports: [LogsService], // для внешного использования
 })
 export class LogsModule {}
