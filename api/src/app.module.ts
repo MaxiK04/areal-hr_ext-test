@@ -8,6 +8,7 @@ import { EmployeesModule } from './modules/employees/employees.module';
 import { FilesModule} from './modules/files/files.module';
 import { HrOperationsModule } from './modules/hr_operations/hr-operations.module'
 import { LogsModule } from './modules/logs/logs.module'
+import { UsersModule } from  './modules/users/users.module'
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { LogsModule } from './modules/logs/logs.module'
     EmployeesModule,
     FilesModule,
     HrOperationsModule,
-    LogsModule
+    LogsModule,
+    UsersModule
   ],
 })
 export class AppModule {}
