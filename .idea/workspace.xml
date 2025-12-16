@@ -6,6 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="6af4562a-e967-490d-8182-ac3dfd4ffc0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/auth.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/auth.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/auth.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/constants.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/dto/login.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/dto/login.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/dto/register.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/dto/register.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/guard/jwt-auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/guard/jwt-auth.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/strategies/jwt.strategy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/strategies/jwt.strategy.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/users/interfaces/user.interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/users/interfaces/user.interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/users/users.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/users/users.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/users/users.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/users/users.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/users/users.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/users/users.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +38,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -163,7 +176,8 @@
       <workItem from="1765613008526" duration="21603000" />
       <workItem from="1765690105179" duration="16235000" />
       <workItem from="1765773613748" duration="473000" />
-      <workItem from="1765774589737" duration="10332000" />
+      <workItem from="1765774589737" duration="12084000" />
+      <workItem from="1765874936059" duration="8496000" />
     </task>
     <servers />
   </component>

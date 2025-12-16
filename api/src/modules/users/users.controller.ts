@@ -1,3 +1,4 @@
+
 import {
     Controller,
     Get,
@@ -19,6 +20,7 @@ import { User } from './interfaces/user.interface';
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
+
 
     @Get()
     async findAll(): Promise<User[]> {
