@@ -20,4 +20,5 @@ export const UpdateEmployeeSchema = Joi.object({
     registration_house: Joi.string().trim().max(20).optional(),
     registration_korp: Joi.string().trim().allow('').optional(),
     registration_apart: Joi.string().trim().allow('').optional(),
+
 });

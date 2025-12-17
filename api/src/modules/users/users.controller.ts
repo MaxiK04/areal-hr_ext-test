@@ -11,17 +11,23 @@ import {
     UsePipes,
     ValidationPipe,
     HttpCode,
-    HttpStatus
+    HttpStatus,
+    UseGuards
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './interfaces/user.interface';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { RolesGuard } from '../auth/guard/roles.guard';
+import { Public } from '../auth/decorators/public.decorator';
+
 @Controller('users')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
-
+    @Public()
     @Get()
     async findAll(): Promise<User[]> {
         return this.usersService.findAll();
@@ -36,7 +42,7 @@ export class UsersController {
     async findOne(@Param('id') id: string): Promise<User> {
         return this.usersService.findOne(+id);
     }
-
+    @Public()
     @Post()
     @UsePipes(new ValidationPipe({ transform: true }))
     async create(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -64,6 +70,7 @@ export class UsersController {
         return { success: restored };
     }
 
+    @Public()
     @Post('login')
     async login(@Body() body: { login: string; password: string }): Promise<any> {
         const user = await this.usersService.validateUser(body.login, body.password);

@@ -8,14 +8,17 @@ import {
     Patch,
     Delete,
     BadRequestException,
+    UseGuards
 } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { CreateEmployeeSchema } from './schemas/create-employee.schema';
 import { UpdateEmployeeSchema } from './schemas/update-employee.schema';
-
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { RolesGuard } from '../auth/guard/roles.guard';
 @Controller('employees')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class EmployeesController {
     constructor(private readonly employeesService: EmployeesService) {}
 

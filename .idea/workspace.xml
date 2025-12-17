@@ -5,19 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6af4562a-e967-490d-8182-ac3dfd4ffc0e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/api/src/modules/auth/decorators/public.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/modules/auth/guard/roles.guard.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/migrations/1765614911021_create-employees.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/migrations/1765614911021_create-employees.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/app.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/modules/auth/auth.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/auth.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/auth.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/auth.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/constants.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/dto/login.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/dto/login.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/dto/register.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/dto/register.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/guard/jwt-auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/guard/jwt-auth.guard.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/strategies/jwt.strategy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/strategies/jwt.strategy.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/users/interfaces/user.interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/users/interfaces/user.interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/dto/create-employee.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/dto/create-employee.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/dto/update-employee.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/dto/update-employee.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/employees.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/employees.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/employees.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/employees.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/interfaces/employee.interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/interfaces/employee.interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/schemas/create-employee.schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/schemas/create-employee.schema.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/schemas/update-employee.schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/schemas/update-employee.schema.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/modules/users/users.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/users/users.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/users/users.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/users/users.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/modules/users/users.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/users/users.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -37,6 +38,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -177,7 +181,8 @@
       <workItem from="1765690105179" duration="16235000" />
       <workItem from="1765773613748" duration="473000" />
       <workItem from="1765774589737" duration="12084000" />
-      <workItem from="1765874936059" duration="8496000" />
+      <workItem from="1765874936059" duration="8804000" />
+      <workItem from="1765999328356" duration="9048000" />
     </task>
     <servers />
   </component>

@@ -14,4 +14,5 @@ export class UpdateEmployeeDto {
     registration_house?: string;
     registration_korp?: string;
     registration_apart?: string;
+
 }

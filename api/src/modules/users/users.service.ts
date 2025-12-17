@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
+    userRepository: any;
     constructor(private readonly databaseService: DatabaseService) {}
 
     private async hashPassword(password: string): Promise<string> {
@@ -45,39 +46,49 @@ export class UsersService {
 
 
     async create(createUserDto: CreateUserDto): Promise<any> {
+        const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+
+        console.log('Создание пользователя:', createUserDto.login, 'пароль хэширован');
+
         const query = `
-            INSERT INTO "user"
-                (second_name, name, last_name, login, password, role)
-            VALUES ($1, $2, $3, $4, $5, $6)
-                RETURNING 
-      id_user, 
-      second_name, 
-      name, 
-      last_name, 
-      login, 
-      role, 
-      created_at, 
-      updated_at
-        `;
+        INSERT INTO "user" (  
+            second_name, 
+            name, 
+            last_name, 
+            login, 
+            password, 
+            role
+        )
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING 
+            id_user, 
+            second_name, 
+            name, 
+            last_name, 
+            login, 
+            role, 
+            created_at, 
+            updated_at
+    `;
 
         const values = [
             createUserDto.second_name,
             createUserDto.name,
             createUserDto.last_name || '',
             createUserDto.login,
-            createUserDto.password,
+            hashedPassword,
             createUserDto.role || 'user'
         ];
 
-        console.log('CREATE USER VALUES:', values);
+        console.log('Параметры SQL:', values);
 
         try {
             const result = await this.databaseService.query(query, values);
-            console.log('CREATE RESULT:', result);
+            console.log('Пользователь создан:', result.rows[0]);
             return result.rows[0];
         } catch (error) {
-            console.error('CREATE ERROR:', error);
-            throw error;
+            console.error('Ошибка создания пользователя:', error.message);
+            throw new InternalServerErrorException('Failed to create user: ' + error.message);
         }
     }
 
@@ -243,20 +254,20 @@ export class UsersService {
         return result.rows as UserWithoutPassword[];
     }
 
-    async validateUser(login: string, password: string): Promise<UserWithoutPassword | null> {
+    async validateUser(login: string, password: string): Promise<User | null> {
         const user = await this.findByLogin(login);
 
         if (!user) {
             return null;
         }
 
-        const isPasswordValid = await this.comparePassword(password, user.password);
+        const isPasswordValid = await bcrypt.compare(password, user.password);
 
-        if (!isPasswordValid) {
-            return null;
+        if (isPasswordValid) {
+            return user;
         }
-        const { password: _, ...userWithoutPassword } = user;
-        return userWithoutPassword as UserWithoutPassword;
+
+        return null;
     }
 
     async verifyPassword(userId: number, password: string): Promise<boolean> { //  метод для проверки пароля

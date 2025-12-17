@@ -79,7 +79,6 @@ exports.up = (pgm) => {
         },
         user_id: {
             type: 'INTEGER',
-            notNull: true,
             references: 'users(user_id)',
             onDelete: 'SET NULL',
         }
