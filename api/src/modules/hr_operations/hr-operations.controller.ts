@@ -1,8 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    UseGuards
+} from '@nestjs/common';
 import { HrOperationsService } from './hr-operations.service';
 import { CreateHrOperationDto } from './dto/create-hr-operation.dto';
-
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { RolesGuard } from '../auth/guard/roles.guard';
+import { Public } from '../auth/decorators/public.decorator';
 @Controller('hr-operations')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class HrOperationsController {
     constructor(private readonly hrOperationsService: HrOperationsService) {}
 

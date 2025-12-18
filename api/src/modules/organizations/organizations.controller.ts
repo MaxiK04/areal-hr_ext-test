@@ -8,14 +8,17 @@ import {
     Patch,
     Delete,
     BadRequestException,
+    UseGuards
 } from '@nestjs/common';
 import { OrganizationsService } from './organizations.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
 import { CreateOrganizationSchema } from './schemas/create-organization.schema';
 import { UpdateOrganizationSchema } from './schemas/update-organization.schema';
-
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { RolesGuard } from '../auth/guard/roles.guard';
 @Controller('organizations')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class OrganizationsController {
     constructor(private readonly organizationsService: OrganizationsService) {}
 
