@@ -4,6 +4,7 @@ import { DatabaseService } from '../../database/database.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { buildUpdateQuery } from '../../common/query.helper';
+import { error } from 'node:console';
 
 @Injectable()
 export class DepartmentsService {
@@ -32,7 +33,7 @@ export class DepartmentsService {
 
     async create(validateDto: CreateDepartmentDto): Promise<Department> {
         const query = `
-      INSERT INTO department (id_organization, name, comment,parent_id) 
+      INSERT INTO department (organization_id, name, comment,parent_id) 
       VALUES ($1, $2, $3, $4) 
       RETURNING *
     `;
@@ -41,11 +42,12 @@ export class DepartmentsService {
             const result = await this.databaseService.query(query, [
                 validateDto.organization_id,
                 validateDto.name,
-                validateDto.parent_id,
                 validateDto.comment,
+                validateDto.parent_id,
             ]);
             return result.rows[0] as Department;
         } catch {
+            console.error('Database error:', error);
             throw new InternalServerErrorException('Failed to create department');
         }
     }

@@ -4,6 +4,7 @@ import { DatabaseService } from '../../database/database.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { buildUpdateQuery } from '../../common/query.helper';
+import { error } from 'node:console';
 
 @Injectable()
 export class EmployeesService {
@@ -47,9 +48,9 @@ export class EmployeesService {
         registration_street, 
         registration_house, 
         registration_korp, 
-        registration_apart,
+        registration_apart
       ) 
-      VALUES ($1, $2, $3,$4,$5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15,)
+      VALUES ($1, $2, $3,$4,$5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
       RETURNING *
     `;
 
@@ -57,7 +58,7 @@ export class EmployeesService {
             const result = await this.databaseService.query(query, [
                 validatedDto.second_name,
                 validatedDto.name,
-                validatedDto.last_name,
+                validatedDto.last_name || null,
                 validatedDto.birth_date,
                 validatedDto.passport_serial,
                 validatedDto.passport_number,
@@ -68,11 +69,12 @@ export class EmployeesService {
                 validatedDto.registration_city,
                 validatedDto.registration_street,
                 validatedDto.registration_house,
-                validatedDto.registration_korp,
-                validatedDto.registration_apart,
+                validatedDto.registration_korp || null,
+                validatedDto.registration_apart|| null
             ]);
+            console.log('Result:', result.rows[0]);
             return result.rows[0] as Employee;
-        } catch {
+        } catch (error: any) {
             throw new InternalServerErrorException('Failed to create employee');
         }
     }

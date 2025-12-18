@@ -64,9 +64,9 @@ export class FilesService {
         if (!validatedDto.name?.trim()) {
             throw new BadRequestException('File name is required');
         }
-        if (!validatedDto.file_data) {
-            throw new BadRequestException('File data is required');
-        }
+        // if (!validatedDto.file_data) {
+        //     throw new BadRequestException('File data is required');
+        // }
         if (!validatedDto.employee_id || validatedDto.employee_id <= 0) {
             throw new BadRequestException('Valid employee ID is required');
         }

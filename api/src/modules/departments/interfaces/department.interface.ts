@@ -1,6 +1,6 @@
 export interface Department {
-    department_id: number;
-    id_organization: number;
+    id_department: number;
+    orgnization_od: number;
     name: string;
     comment: string;
     parent_id: number | null;

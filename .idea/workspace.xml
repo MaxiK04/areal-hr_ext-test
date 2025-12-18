@@ -6,11 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="6af4562a-e967-490d-8182-ac3dfd4ffc0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/departments/departments.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/departments/departments.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/logs/logs.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/logs/logs.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/organizations/organizations.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/organizations/organizations.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/positions/positions.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/positions/positions.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/departments/departments.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/departments/departments.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/departments/interfaces/department.interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/departments/interfaces/department.interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/departments/schemas/create-department.schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/departments/schemas/create-department.schema.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/employees.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/employees.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/files/files.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/files/files.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/files/schemas/create-file.schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/files/schemas/create-file.schema.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +34,7 @@
   &quot;isMigrated&quot;: true
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -174,7 +175,7 @@
       <workItem from="1765774589737" duration="12084000" />
       <workItem from="1765874936059" duration="8804000" />
       <workItem from="1765999328356" duration="9422000" />
-      <workItem from="1766036342978" duration="643000" />
+      <workItem from="1766036342978" duration="4414000" />
     </task>
     <servers />
   </component>
