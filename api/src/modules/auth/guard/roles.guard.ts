@@ -1,30 +1,25 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException,UnauthorizedException } from '@nestjs/common';
+// src/modules/auth/guard/roles.guard.ts
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-    constructor(private reflector: Reflector) {
-    }
+    constructor(private reflector: Reflector) {}
 
-    canActivate(context: ExecutionContext): boolean {
+    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+        const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
+        if (!requiredRoles) {
+            return true;
+        }
+
         const request = context.switchToHttp().getRequest();
         const user = request.user;
-        const method = request.method;
 
         if (!user) {
-            throw new UnauthorizedException('Требуется авторизация');
+            return false;
         }
 
-        const userRole = user.role;
-
-        if (userRole === 'admin') {
-            return true;
-        }
-
-        if (userRole === 'user' && method === 'GET') {
-            return true;
-        }
-        throw new ForbiddenException('Недостаточно прав. Требуется роль admin');
+        return requiredRoles.includes(user.role);
     }
 }

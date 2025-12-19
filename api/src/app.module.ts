@@ -15,7 +15,7 @@ import { JwtAuthGuard } from './modules/auth/guard/jwt-auth.guard';
 import { RolesGuard } from './modules/auth/guard/roles.guard';
 @Module({
   imports: [
-    ConfigModule.forRoot({
+      ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),

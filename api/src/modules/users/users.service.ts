@@ -7,7 +7,6 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-    userRepository: any;
     constructor(private readonly databaseService: DatabaseService) {}
 
     private async hashPassword(password: string): Promise<string> {
@@ -15,14 +14,14 @@ export class UsersService {
         return bcrypt.hash(password, saltRounds);
     }
 
-    private async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
-        return bcrypt.compare(password, hashedPassword);
-    }
-
     async findByLogin(login: string): Promise<any> {
         const query = `SELECT * FROM "user" WHERE login = $1 AND deleted_at IS NULL`;
         const result = await this.databaseService.query(query, [login]);
         return result.rows[0] || null;
+    }
+
+    async findOneByLogin(login: string): Promise<any> {
+        return this.findByLogin(login);
     }
 
     async findById(id: number): Promise<any> {
@@ -37,42 +36,49 @@ export class UsersService {
               created_at, 
               updated_at
             FROM "user" 
-    WHERE id_user = $1 AND deleted_at IS NULL
-  `;
+            WHERE id_user = $1 AND deleted_at IS NULL
+        `;
         const result = await this.databaseService.query(query, [id]);
         return result.rows[0] || null;
     }
 
-
+    async findOne(id: number): Promise<any> {
+        return this.findById(id);
+    }
 
     async create(createUserDto: CreateUserDto): Promise<any> {
+        const existingUser = await this.findByLogin(createUserDto.login);
+        if (existingUser) {
+            throw new ConflictException('Пользователь с таким логином уже существует');
+        }
+
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
         console.log('Создание пользователя:', createUserDto.login, 'пароль хэширован');
 
         const query = `
-        INSERT INTO "user" (  
-            second_name, 
-            name, 
-            last_name, 
-            login, 
-            password, 
-            role
-        )
-        VALUES ($1, $2, $3, $4, $5, $6)
-        RETURNING 
-            id_user, 
-            second_name, 
-            name, 
-            last_name, 
-            login, 
-            role, 
-            created_at, 
-            updated_at
-    `;
+            INSERT INTO "user" (
+                second_name,
+                name,
+                last_name,
+                login,
+                password,
+                role
+            )
+            VALUES ($1, $2, $3, $4, $5, $6)
+                RETURNING 
+                id_user, 
+                second_name, 
+                name, 
+                last_name, 
+                login, 
+                role, 
+                created_at, 
+                updated_at
+        `;
 
         const values = [
-            createUserDto.second_name,
+            createUserDto.second_name || '',
             createUserDto.name,
             createUserDto.last_name || '',
             createUserDto.login,
@@ -92,16 +98,16 @@ export class UsersService {
         }
     }
 
-    async findAll(): Promise<UserWithoutPassword[]> {
+    async findAll(): Promise<any[]> {
         const query = `
-            SELECT 
-                id_user, 
-                second_name, 
-                name, 
-                last_name, 
-                login, 
-                role, 
-                created_at, 
+            SELECT
+                id_user,
+                second_name,
+                name,
+                last_name,
+                login,
+                role,
+                created_at,
                 updated_at
             FROM "user"
             WHERE deleted_at IS NULL
@@ -109,24 +115,19 @@ export class UsersService {
         `;
 
         const result = await this.databaseService.query(query);
-        return result.rows as UserWithoutPassword[];
+        return result.rows;
     }
 
-    async findOne(id: number): Promise<UserWithoutPassword> {
-        const user = await this.findById(id);
+    async update(id: number, updateUserDto: UpdateUserDto): Promise<any> {
 
-        if (!user) {
+        const existingUser = await this.findById(id);
+        if (!existingUser) {
             throw new NotFoundException(`Пользователь с ID ${id} не найден`);
         }
 
-        return user;
-    }
-
-    async update(id: number, updateUserDto: UpdateUserDto): Promise<UserWithoutPassword> {
-        await this.findOne(id);
-        if (updateUserDto.login) {
-            const existingUser = await this.findByLogin(updateUserDto.login);
-            if (existingUser && existingUser.id_user !== id) {
+        if (updateUserDto.login && updateUserDto.login !== existingUser.login) {
+            const userWithSameLogin = await this.findByLogin(updateUserDto.login);
+            if (userWithSameLogin) {
                 throw new ConflictException(`Логин '${updateUserDto.login}' уже занят`);
             }
         }
@@ -137,7 +138,7 @@ export class UsersService {
 
         if (updateUserDto.second_name !== undefined) {
             fields.push(`second_name = $${paramIndex}`);
-            values.push(updateUserDto.second_name);
+            values.push(updateUserDto.second_name || '');
             paramIndex++;
         }
 
@@ -149,7 +150,7 @@ export class UsersService {
 
         if (updateUserDto.last_name !== undefined) {
             fields.push(`last_name = $${paramIndex}`);
-            values.push(updateUserDto.last_name || null);
+            values.push(updateUserDto.last_name || '');
             paramIndex++;
         }
 
@@ -171,6 +172,7 @@ export class UsersService {
             values.push(updateUserDto.role);
             paramIndex++;
         }
+
         if (fields.length === 0) {
             throw new Error('Нет полей для обновления');
         }
@@ -200,7 +202,7 @@ export class UsersService {
                 throw new NotFoundException(`Пользователь с ID ${id} не найден`);
             }
 
-            return result.rows[0] as UserWithoutPassword;
+            return result.rows[0];
         } catch (error) {
             console.error('Error updating user:', error);
             throw new InternalServerErrorException('Не удалось обновить пользователя');
@@ -208,7 +210,10 @@ export class UsersService {
     }
 
     async remove(id: number): Promise<boolean> {
-        await this.findOne(id);
+        const existingUser = await this.findById(id);
+        if (!existingUser) {
+            throw new NotFoundException(`Пользователь с ID ${id} не найден`);
+        }
 
         const query = `
             UPDATE "user" 
@@ -223,38 +228,38 @@ export class UsersService {
 
     async restore(id: number): Promise<boolean> {
         const query = `
-            UPDATE "user" 
-            SET deleted_at = NULL 
+            UPDATE "user"
+            SET deleted_at = NULL
             WHERE id_user = $1 AND deleted_at IS NOT NULL
-            RETURNING id_user
+                RETURNING id_user
         `;
 
         const result = await this.databaseService.query(query, [id]);
         return result.rowCount > 0;
     }
 
-    async findDeleted(): Promise<UserWithoutPassword[]> {
+    async findDeleted(): Promise<any[]> {
         const query = `
-            SELECT 
-                id_user, 
-                second_name, 
-                name, 
-                last_name, 
-                login, 
-                role, 
-                created_at, 
+            SELECT
+                id_user,
+                second_name,
+                name,
+                last_name,
+                login,
+                role,
+                created_at,
                 updated_at,
                 deleted_at
-            FROM "user" 
+            FROM "user"
             WHERE deleted_at IS NOT NULL
             ORDER BY deleted_at DESC
         `;
 
         const result = await this.databaseService.query(query);
-        return result.rows as UserWithoutPassword[];
+        return result.rows;
     }
 
-    async validateUser(login: string, password: string): Promise<User | null> {
+    async validateUser(login: string, password: string): Promise<any> {
         const user = await this.findByLogin(login);
 
         if (!user) {
@@ -264,20 +269,10 @@ export class UsersService {
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (isPasswordValid) {
-            return user;
+            const { password, ...userWithoutPassword } = user;
+            return userWithoutPassword;
         }
 
         return null;
-    }
-
-    async verifyPassword(userId: number, password: string): Promise<boolean> { //  метод для проверки пароля
-        const query = `SELECT password FROM "user" WHERE id_user = $1`;
-        const result = await this.databaseService.query(query, [userId]);
-
-        if (result.rows.length === 0) {
-            return false;
-        }
-
-        return this.comparePassword(password, result.rows[0].password);
     }
 }
