@@ -5,18 +5,18 @@ import {
     Body,
     Param,
     ParseIntPipe,
-    Patch,
+    Put,
     Delete,
     BadRequestException,
-    UseGuards
+    UseGuards,
+    Request
 } from '@nestjs/common';
 import { OrganizationsService } from './organizations.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
-import { CreateOrganizationSchema } from './schemas/create-organization.schema';
-import { UpdateOrganizationSchema } from './schemas/update-organization.schema';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { RolesGuard } from '../auth/guard/roles.guard';
+
 @Controller('organizations')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class OrganizationsController {
@@ -33,35 +33,30 @@ export class OrganizationsController {
     }
 
     @Post()
-    async create(@Body() createOrganizationDto: CreateOrganizationDto) {
-        const { error, value } = CreateOrganizationSchema.validate(
-            createOrganizationDto,
-        );
-
-        if (error) {
-            throw new BadRequestException(`Validation failed: ${error.message}`);
-        }
-
-        return this.organizationsService.create(value);
+    async create(
+        @Body() createOrganizationDto: CreateOrganizationDto,
+        @Request() req
+    ) {
+        const userId = req.user?.id_user || req.user?.id || 0;
+        return this.organizationsService.create(createOrganizationDto, userId);
     }
 
-    @Patch(':id')
+    @Put(':id')
     async update(
         @Param('id', ParseIntPipe) id: number,
         @Body() updateOrganizationDto: UpdateOrganizationDto,
+        @Request() req
     ) {
-        const { error, value } = UpdateOrganizationSchema.validate(
-            updateOrganizationDto,
-        );
-
-        if (error) {
-            throw new BadRequestException(`Validation failed: ${error.message}`);
-        }
-        return this.organizationsService.update(id, value);
+        const userId = req.user?.id_user || req.user?.id || 0;
+        return this.organizationsService.update(id, updateOrganizationDto, userId);
     }
 
     @Delete(':id')
-    async remove(@Param('id', ParseIntPipe) id: number) {
-        return this.organizationsService.remove(id);
+    async remove(
+        @Param('id', ParseIntPipe) id: number,
+        @Request() req
+    ) {
+        const userId = req.user?.id_user || req.user?.id || 0;
+        return this.organizationsService.remove(id, userId);
     }
 }

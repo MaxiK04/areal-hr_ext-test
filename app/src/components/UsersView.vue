@@ -16,10 +16,10 @@
       </div>
     </div>
 
-    <div v-if="error" style="background: #ffebee; color: #c62828; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+    <div v-if="error" style="padding: 10px; margin-bottom: 15px; border-radius: 4px;">
       {{ error }}
     </div>
-    <div v-if="success" style="background: #e8f5e9; color: #2e7d32; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+    <div v-if="success" style="padding: 10px; margin-bottom: 15px; border-radius: 4px;">
       {{ success }}
     </div>
 

@@ -3,6 +3,7 @@ import { OrganizationsController } from './organizations.controller';
 import { OrganizationsService } from './organizations.service';
 import { DatabaseModule } from '../../database/database.module';
 
+
 @Module({
   imports: [DatabaseModule],
   controllers: [OrganizationsController],

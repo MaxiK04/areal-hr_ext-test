@@ -18,6 +18,12 @@
         <button @click="$router.push('/positions')" :class="{ active: $route.path === '/positions' }">
           Должности
         </button>
+        <button @click="$router.push('/organizations')" :class="{ active: $route.path === '/organizations' }">
+          Организации
+        </button>
+        <button @click="$router.push('/hr-operations')" :class="{ active: $route.path === '/hr-operations' }">
+          HR-Operations
+        </button>
         <div style="margin-left: auto;">
           <button @click="logout" style="background: #dc3545; color: white;">
             Выйти
