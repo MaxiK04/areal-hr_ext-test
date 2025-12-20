@@ -1,9 +1,13 @@
 <template>
   <div style="padding: 20px;">
+    <div v-if="userRole !== 'admin'" style="background: #fff3cd; color: #856404; padding: 15px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #ffeaa7;">
+      Права только на просмотр данных. Редактирование и удаление недоступно
+    </div>
+
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <h1 style="margin: 0;">Пользователи</h1>
       <div>
-        <button @click="showCreateModal = true" style="margin-right: 10px;">
+        <button v-if="userRole === 'admin'" @click="showCreateModal = true" style="margin-right: 10px;">
           Добавить
         </button>
         <button @click="loadUsers" :disabled="loading">
@@ -11,21 +15,22 @@
         </button>
       </div>
     </div>
+
     <div v-if="error" style="background: #ffebee; color: #c62828; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
       {{ error }}
     </div>
     <div v-if="success" style="background: #e8f5e9; color: #2e7d32; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
       {{ success }}
     </div>
-    <table v-else style="width: 100%; border-collapse: collapse;">
+
+    <table style="width: 100%; border-collapse: collapse;">
       <thead>
       <tr style="background: #f5f5f5;">
-
         <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Логин</th>
         <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Имя</th>
         <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Фамилия</th>
         <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Роль</th>
-        <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Действия</th>
+        <th v-if="userRole === 'admin'" style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Действия</th>
       </tr>
       </thead>
       <tbody>
@@ -34,23 +39,33 @@
         <td style="padding: 12px;">{{ user.name }}</td>
         <td style="padding: 12px;">{{ user.second_name }}</td>
         <td style="padding: 12px;">
-          <select v-model="user.role" @change="updateRole(user)" style="padding: 4px 8px;">
+          <select
+              v-if="userRole === 'admin'"
+              v-model="user.role"
+              @change="updateRole(user)"
+              style="padding: 4px 8px;"
+          >
             <option value="user">Менеджер</option>
             <option value="admin">Администратор</option>
           </select>
+          <span v-else>
+              {{ user.role === 'admin' ? 'Администратор' : 'Менеджер' }}
+            </span>
         </td>
-        <td style="padding: 12px;">
-          <button @click="deleteUser(user)" style="padding: 6px 12px; background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;">
+        <td v-if="userRole === 'admin'" style="padding: 12px;">
+          <button
+              @click="deleteUser(user)"
+              style="padding: 6px 12px; background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;"
+          >
             Удалить
           </button>
         </td>
       </tr>
       </tbody>
     </table>
-
-    <div v-if="showCreateModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;">
+    <div v-if="showCreateModal && userRole === 'admin'" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;">
       <div style="background: white; padding: 30px; border-radius: 8px; width: 400px;">
-        <h2 style="margin-top: 0;">Новый менедежр</h2>
+        <h2 style="margin-top: 0;">Новый менеджер</h2>
 
         <input v-model="newUser.login" placeholder="Логин" style="width: 100%; padding: 8px; margin-bottom: 10px;">
         <input v-model="newUser.password" type="password" placeholder="Пароль" style="width: 100%; padding: 8px; margin-bottom: 10px;">
@@ -64,8 +79,11 @@
 
         <div style="display: flex; justify-content: flex-end; gap: 10px;">
           <button @click="showCreateModal = false">Отмена</button>
-          <button @click="createUser" :disabled="!newUser.login || !newUser.password"
-                  style="background: #2196f3; color: white;">
+          <button
+              @click="createUser"
+              :disabled="!newUser.login || !newUser.password"
+              style="background: #2196f3; color: white;"
+          >
             Создать
           </button>
         </div>
@@ -83,6 +101,7 @@ const error = ref('');
 const success = ref('');
 const showCreateModal = ref(false);
 
+const userRole = ref('user');
 
 const newUser = ref({
   login: '',
@@ -91,6 +110,18 @@ const newUser = ref({
   second_name: '',
   role: 'user'
 });
+function getUserRole() {
+  try {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      return parsed.role || 'user';
+    }
+  } catch (e) {
+    console.error('Ошибка при получении роли:', e);
+  }
+  return 'user';
+}
 
 async function loadUsers() {
   loading.value = true;
@@ -111,11 +142,18 @@ async function loadUsers() {
     loading.value = false;
   }
 }
+
 async function createUser() {
+  if (userRole.value !== 'admin') {
+    error.value = 'Недостаточно прав для создания пользователя';
+    return;
+  }
+
   if (!newUser.value.login || !newUser.value.password || !newUser.value.name) {
     error.value = 'Заполните все обязательные поля';
     return;
   }
+
   try {
     const res = await fetch('http://localhost:3000/auth/register', {
       method: 'POST',
@@ -139,6 +177,7 @@ async function createUser() {
       }
       throw new Error(data.message || `Ошибка ${res.status}`);
     }
+
     success.value = `Пользователь "${newUser.value.login}" создан успешно!`;
     showCreateModal.value = false;
     newUser.value = {
@@ -148,16 +187,26 @@ async function createUser() {
       second_name: '',
       role: 'user'
     };
+
     await loadUsers();
+
     setTimeout(() => {
       success.value = '';
     }, 3000);
+
   } catch (err) {
     error.value = err.message;
     console.error('Ошибка создания:', err);
   }
 }
+
 async function updateRole(user) {
+  if (userRole.value !== 'admin') {
+    error.value = 'Недостаточно прав для изменения роли';
+    await loadUsers();
+    return;
+  }
+
   try {
     const token = localStorage.getItem('authToken');
     const res = await fetch(`http://localhost:3000/users/${user.id_user}/role`, {
@@ -170,12 +219,17 @@ async function updateRole(user) {
         role: user.role
       })
     });
+
     if (!res.ok) {
       const data = await res.json();
       throw new Error(data.message || `Ошибка ${res.status}`);
     }
+
     success.value = `Роль пользователя "${user.login}" обновлена`;
-    setTimeout(() => success.value = '', 2000);
+
+    setTimeout(() => {
+      success.value = '';
+    }, 2000);
 
   } catch (err) {
     error.value = err.message;
@@ -184,6 +238,11 @@ async function updateRole(user) {
 }
 
 async function deleteUser(user) {
+  if (userRole.value !== 'admin') {
+    error.value = 'Недостаточно прав для удаления пользователя';
+    return;
+  }
+
   if (!confirm(`Удалить пользователя "${user.login}"?`)) return;
 
   try {
@@ -203,7 +262,10 @@ async function deleteUser(user) {
 
     users.value = users.value.filter(u => u.id_user !== user.id_user);
     success.value = `Пользователь "${user.login}" удален`;
-    setTimeout(() => success.value = '', 2000);
+
+    setTimeout(() => {
+      success.value = '';
+    }, 2000);
 
   } catch (err) {
     error.value = err.message;
@@ -211,6 +273,11 @@ async function deleteUser(user) {
 }
 
 onMounted(() => {
+  userRole.value = getUserRole();
+
+  console.log('Текущая роль пользователя:', userRole.value);
+  console.log('userData из localStorage:', localStorage.getItem('userData'));
+
   loadUsers();
 });
 </script>

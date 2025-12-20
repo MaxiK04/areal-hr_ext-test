@@ -13,7 +13,7 @@ async function handleLogin() {
 
     const response = await fetch('http://localhost:3000/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         login: login.value,
         password: password.value
@@ -21,16 +21,46 @@ async function handleLogin() {
     });
 
     const data = await response.json();
-    console.log('Ответ от сервера:', data);
+    console.log('Полный ответ от сервера:', data);
 
     if (response.ok) {
 
       localStorage.setItem('authToken', data.access_token);
-      console.log('Токен сохранён в localStorage:', data.access_token);
+      console.log('Токен сохранён');
 
-      const savedToken = localStorage.getItem('authToken');
-      console.log('Проверка токена из localStorage:', savedToken);
+
+      if (data.user) {
+        localStorage.setItem('userData', JSON.stringify({
+          id: data.user.id || data.user.id_user,
+          login: data.user.login,
+          name: data.user.name,
+          role: data.user.role, // ← КЛЮЧЕВОЕ ПОЛЕ
+          second_name: data.user.second_name || ''
+        }));
+        console.log('Данные пользователя с ролью сохранены:', data.user);
+      } else {
+        console.error('В ответе нет данных пользователя!');
+        try {
+          const tokenParts = data.access_token.split('.');
+          if (tokenParts.length === 3) {
+            const payload = JSON.parse(atob(tokenParts[1]));
+            localStorage.setItem('userData', JSON.stringify({
+              id: payload.sub,
+              login: payload.login,
+              role: payload.role || 'user'
+            }));
+            console.log('Данные из токена:', payload);
+          }
+        } catch (e) {
+          console.error('Не удалось декодировать токен:', e);
+        }
+      }
+
+      console.log('Токен в localStorage:', localStorage.getItem('authToken'));
+      console.log('userData в localStorage:', localStorage.getItem('userData'));
+
       router.push('/dashboard');
+
     } else {
       error.value = data.message || 'Ошибка входа';
     }
@@ -45,7 +75,8 @@ async function handleLogin() {
   <div style="max-width: 400px; margin: 100px auto; padding: 30px; border: 1px solid #ddd; border-radius: 8px;">
     <h2 style="text-align: center; margin-bottom: 30px;">Вход в систему</h2>
 
-    <div v-if="error" style="background: #ffebee; color: #c62828; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+    <div v-if="error"
+         style="background: #ffebee; color: #c62828; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
       {{ error }}
     </div>
 
@@ -56,10 +87,12 @@ async function handleLogin() {
 
     <div style="margin-bottom: 25px;">
       <label style="display: block; margin-bottom: 5px;">Пароль:</label>
-      <input v-model="password" type="password" style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ddd;">
+      <input v-model="password" type="password"
+             style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ddd;">
     </div>
 
-    <button @click="handleLogin" style="width: 100%; padding: 12px; background: #2196f3; color: white; border: none; cursor: pointer;">
+    <button @click="handleLogin"
+            style="width: 100%; padding: 12px; background: #2196f3; color: white; border: none; cursor: pointer;">
       Войти
     </button>
 
