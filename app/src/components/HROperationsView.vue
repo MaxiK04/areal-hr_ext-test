@@ -1,14 +1,9 @@
 <template>
   <div style="padding: 20px;">
-    <div v-if="userRole !== 'admin'" style="background: #fff3cd; color: #856404; padding: 15px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #ffeaa7;">
-      Права только на просмотр данных. Редактирование и удаление недоступно
-    </div>
-
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <h1 style="margin: 0;">HR Операции</h1>
       <div>
         <button
-            v-if="userRole === 'admin'"
             @click="showCreateModal = true"
             style="margin-right: 10px;"
         >
@@ -42,7 +37,7 @@
           <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Должность</th>
           <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Зарплата</th>
           <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Дата</th>
-          <th v-if="userRole === 'admin'" style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Действия</th>
+          <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Действия</th>
         </tr>
         </thead>
         <tbody>
@@ -64,7 +59,7 @@
           <td style="padding: 12px;">
             {{ formatDate(operation.created_at) }}
           </td>
-          <td v-if="userRole === 'admin'" style="padding: 12px;">
+          <td style="padding: 12px;">
             <button
                 @click="deleteOperation(operation)"
                 style="padding: 6px 12px; background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;"
@@ -74,7 +69,7 @@
           </td>
         </tr>
         <tr v-if="operations.length === 0">
-          <td :colspan="userRole === 'admin' ? 8 : 7" style="padding: 20px; text-align: center; color: #999;">
+          <td colspan="8" style="padding: 20px; text-align: center; color: #999;">
             Нет данных об операциях
           </td>
         </tr>
@@ -142,10 +137,6 @@
               required
           >
             <option value="">Выберите отдел</option>
-            <!--
-                Если первый отдел имеет id_department: 2,
-                то используем dept.id_department
-            -->
             <option
                 v-for="dept in departments"
                 :key="dept.id_department"
@@ -198,8 +189,10 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+
 const operations = ref([]);
 const employees = ref([]);
 const departments = ref([]);
@@ -209,7 +202,6 @@ const error = ref('');
 const success = ref('');
 const showCreateModal = ref(false);
 const currentEmployeeState = ref(null);
-const userRole = ref('user');
 
 const newOperation = ref({
   employee_id: '',
@@ -218,7 +210,6 @@ const newOperation = ref({
   position_id: '',
   set_salary: ''
 });
-
 
 const showDepartmentField = computed(() => {
   return ['HIRE', 'TRANSFER'].includes(newOperation.value.type_action);
@@ -242,19 +233,6 @@ const isNewEmployee = computed(() => {
       currentEmployeeState.value.hr_status === 'dismiss' ||
       !currentEmployeeState.value.current_department_id;
 });
-
-function getUserRole() {
-  try {
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      const parsed = JSON.parse(userData);
-      return parsed.role || 'user';
-    }
-  } catch (e) {
-    console.error('Ошибка при получении роли:', e);
-  }
-  return 'user';
-}
 
 async function loadOperations() {
   loading.value = true;
@@ -307,17 +285,6 @@ async function loadDepartments() {
 
     if (res.ok) {
       departments.value = await res.json();
-      console.log('Загружены отделы (полная структура):', JSON.parse(JSON.stringify(departments.value)));
-      if (departments.value.length > 0) {
-        const firstDept = departments.value[0];
-        console.log('Ключи первого отдела:', Object.keys(firstDept));
-        console.log('Значения первого отдела:', {
-          id_department: firstDept.id_department,
-          department_id: firstDept.department_id,
-          id: firstDept.id,
-          allProperties: firstDept
-        });
-      }
     }
   } catch (err) {
     console.error('Ошибка загрузки отделов:', err);
@@ -386,10 +353,7 @@ async function createOperation() {
   console.log('=== createOperation началось ===');
   console.log('newOperation.value:', newOperation.value);
   console.log('department_id перед отправкой:', newOperation.value.department_id);
-  if (userRole.value !== 'admin') {
-    error.value = 'Недостаточно прав для создания операции';
-    return;
-  }
+
   if (!newOperation.value.employee_id || !newOperation.value.type_action) {
     error.value = 'Выберите сотрудника и тип операции';
     return;
@@ -400,13 +364,12 @@ async function createOperation() {
     type_action: newOperation.value.type_action
   };
 
-  console.log('Создание операции:', newOperation.value); // Добавьте для отладки
+  console.log('Создание операции:', newOperation.value);
   if (newOperation.value.type_action === 'HIRE') {
     console.log('HIRE - проверка полей:');
     console.log('- department_id:', newOperation.value.department_id, 'type:', typeof newOperation.value.department_id);
     console.log('- position_id:', newOperation.value.position_id, 'type:', typeof newOperation.value.position_id);
     console.log('- set_salary:', newOperation.value.set_salary, 'type:', typeof newOperation.value.set_salary);
-
 
     if (!newOperation.value.department_id ||
         !newOperation.value.position_id ||
@@ -452,7 +415,6 @@ async function createOperation() {
       operationData.set_salary = 30000;
     }
   }
-
   else if (newOperation.value.type_action === 'SALARY_CHANGE') {
     if (!newOperation.value.set_salary) {
       error.value = 'Для изменения зарплаты укажите новую зарплату';
@@ -469,7 +431,6 @@ async function createOperation() {
 
     operationData.set_salary = parseInt(newOperation.value.set_salary);
   }
-
   else if (newOperation.value.type_action === 'DISMISSAL') {
     if (currentEmployeeState.value) {
       operationData.department_id = currentEmployeeState.value.current_department_id || 1;
@@ -481,9 +442,10 @@ async function createOperation() {
       operationData.set_salary = 0;
     }
   }
+
   try {
     const token = localStorage.getItem('authToken');
-    console.log('Отправляемые данные:', operationData); // Добавьте для отладки
+    console.log('Отправляемые данные:', operationData);
 
     const res = await fetch('http://localhost:3000/hr-operations', {
       method: 'POST',
@@ -515,12 +477,8 @@ async function createOperation() {
     console.error('Отправленные данные:', operationData);
   }
 }
-async function deleteOperation(operation) {
-  if (userRole.value !== 'admin') {
-    error.value = 'Недостаточно прав для удаления операции';
-    return;
-  }
 
+async function deleteOperation(operation) {
   if (!confirm(`Удалить операцию #${operation.id}?`)) return;
 
   try {
@@ -549,6 +507,7 @@ async function deleteOperation(operation) {
     error.value = err.message;
   }
 }
+
 function getOperationLabel(type) {
   const labels = {
     'HIRE': 'Прием на работу',
@@ -636,6 +595,7 @@ function onOperationTypeChange() {
 
   previousOperationType = currentType;
 }
+
 let previousOperationType = '';
 
 function resetNewOperation() {
@@ -648,8 +608,8 @@ function resetNewOperation() {
   };
   currentEmployeeState.value = null;
 }
+
 onMounted(() => {
-  userRole.value = getUserRole();
   loadOperations();
   loadEmployees();
   loadDepartments();
