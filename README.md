@@ -1,7 +1,12 @@
 ***areal-hr_ext-test***
 
 ## Задание Реализовать веб-приложение, в котором специалист по кадрам ведет учет сотрудников в нескольких организациях.
-
+## Запуск  
+add db  
+docker compose up  
+cd api -> npm start dev  
+сd app -> npm run dev  
+localhost:3001
 # Areal HR System Stack
 # Инструменты
 -*Операционная система*: Windows 11 с установленным WSL2 и Docker Desktop  
