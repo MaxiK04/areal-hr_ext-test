@@ -5,19 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6af4562a-e967-490d-8182-ac3dfd4ffc0e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/components/DepartmentsView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/components/EmployeesView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/components/HROperationsView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/components/OrganizationsView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/components/PositionsView.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/components/FilesView.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/components/LogsView.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/departments/departments.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/departments/departments.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/organizations/organizations.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/organizations/organizations.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/organizations/organizations.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/organizations/organizations.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/organizations/organizations.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/organizations/organizations.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/positions/positions.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/positions/positions.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/modules/positions/positions.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/positions/positions.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/api/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/auth/guard/roles.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/auth/guard/roles.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/dto/update-employee.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/dto/update-employee.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/employees.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/employees.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/employees.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/employees.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/interfaces/employee.interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/interfaces/employee.interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/employees/schemas/update-employee.schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/employees/schemas/update-employee.schema.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/files/files.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/files/files.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/create-hr-operation.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/dto/create-hr-operation.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/modules/hr_operations/hr-operations.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/components/DepartmentsView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/components/DepartmentsView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/components/EmployeesView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/components/EmployeesView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/components/HROperationsView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/components/HROperationsView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/components/LoginView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/components/LoginView.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/components/UsersView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/components/UsersView.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/router/index.ts" afterDir="false" />
     </list>
@@ -200,7 +208,9 @@
       <workItem from="1766129644263" duration="3689000" />
       <workItem from="1766138291624" duration="27789000" />
       <workItem from="1766204840513" duration="4227000" />
-      <workItem from="1766224706660" duration="25733000" />
+      <workItem from="1766224706660" duration="26047000" />
+      <workItem from="1766291953305" duration="30505000" />
+      <workItem from="1766387024901" duration="8400000" />
     </task>
     <servers />
   </component>

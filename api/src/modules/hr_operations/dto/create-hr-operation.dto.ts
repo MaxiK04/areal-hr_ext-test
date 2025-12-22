@@ -7,8 +7,8 @@ export enum HrActionType {
 
 export class CreateHrOperationDto {
     employee_id: number;
+    type_action: string;
     department_id?: number;
     position_id?: number;
-    set_salary?: number;
-    type_action: HrActionType;
+    set_salary?: string;
 }

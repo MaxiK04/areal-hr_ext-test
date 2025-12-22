@@ -1,4 +1,3 @@
-// hr-operations.service.ts
 import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { DatabaseService } from '../../database/database.service';
 import { CreateHrOperationDto } from './dto/create-hr-operation.dto';
@@ -7,75 +6,76 @@ import { CreateHrOperationDto } from './dto/create-hr-operation.dto';
 export class HrOperationsService {
     constructor(private readonly databaseService: DatabaseService) {}
 
-    async create(validatedDto: CreateHrOperationDto): Promise<any> {
-        console.log('Creating HR operation in table "operation":', validatedDto);
+    async create(createHrOperationDto: CreateHrOperationDto, userId: number): Promise<any> {
+        console.log('=== Создание HR операции ===');
+        console.log('Данные операции:', createHrOperationDto);
+        console.log('User ID:', userId);
+        const setSalary = createHrOperationDto.set_salary ?
+            parseFloat(createHrOperationDto.set_salary) :
+            null;
+
+        const operationQuery = `
+        INSERT INTO operation (
+            employee_id,
+            department_id,
+            position_id,
+            set_salary,
+            type_action,
+            created_at,
+            created_by
+        )
+        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP, $6)
+        RETURNING *
+    `;
 
         try {
+            const operationResult = await this.databaseService.query(operationQuery, [
+                createHrOperationDto.employee_id,
+                createHrOperationDto.department_id || null,
+                createHrOperationDto.position_id || null,
+                setSalary,
+                createHrOperationDto.type_action,
+                userId
+            ]);
 
-            const employeeCheck = await this.databaseService.query(
-                'SELECT id_employee FROM employees WHERE id_employee = $1 AND deleted_at IS NULL',
-                [validatedDto.employee_id]
-            );
+            console.log('Операция создана:', operationResult.rows[0]);
+            const updateEmployeeQuery = `
+                UPDATE employees
+                SET
+                    current_department_id = COALESCE($1, current_department_id),
+                    current_position_id = COALESCE($2, current_position_id),
+                    current_salary = COALESCE($3::DECIMAL(10,2), current_salary),
+                    hr_status = CASE
+                                    WHEN $4 = 'HIRE' THEN 'active'
+                                    WHEN $4 = 'DISMISSAL' THEN 'dismiss'
+                                    ELSE hr_status
+                        END,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id_employee = $5 AND deleted_at IS NULL
+                    RETURNING *
+            `;
 
-            if (employeeCheck.rows.length === 0) {
-                throw new BadRequestException(`Employee with ID ${validatedDto.employee_id} not found`);
-            }
+            const updateResult = await this.databaseService.query(updateEmployeeQuery, [
+                createHrOperationDto.department_id || null,
+                createHrOperationDto.position_id || null,
+                setSalary,
+                createHrOperationDto.type_action,
+                createHrOperationDto.employee_id
+            ]);
 
+            console.log('Сотрудник обновлен:', updateResult.rows[0]);
+            console.log('=== Конец создания операции ===');
 
-            if (validatedDto.type_action !== 'HIRE') {
-                const employeeStatus = await this.databaseService.query(
-                    'SELECT hr_status FROM employees WHERE id_employee = $1',
-                    [validatedDto.employee_id]
-                );
-
-            }
-
-            const result = await this.databaseService.query(
-                `INSERT INTO operation (
-        employee_id, 
-        department_id, 
-        position_id, 
-        set_salary,
-        type_action
-      ) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-                [
-                    validatedDto.employee_id,
-                    validatedDto.department_id || null,
-                    validatedDto.position_id || null,
-                    validatedDto.set_salary || null,
-                    validatedDto.type_action,
-                ]
-            );
-
-
-            if (validatedDto.type_action === 'HIRE') {
-                await this.databaseService.query(
-                    `UPDATE employees 
-         SET hr_status = 'active',
-             current_department_id = $1,
-             current_position_id = $2,
-             current_salary = $3,
-             updated_at = CURRENT_TIMESTAMP
-         WHERE id_employee = $4`,
-                    [
-                        validatedDto.department_id || null,
-                        validatedDto.position_id || null,
-                        validatedDto.set_salary || null,
-                        validatedDto.employee_id
-                    ]
-                );
-            }
-
-            console.log('HR operation created successfully:', result.rows[0]);
-            return result.rows[0];
-
-        } catch (error) {
-            console.error('Full error creating HR operation:', error);
+            return operationResult.rows[0];
+        } catch (error: any) {
+            console.error('Ошибка создания HR операции:', error.message);
+            console.error('Стек:', error.stack);
             throw new InternalServerErrorException(`Failed to create HR operation: ${error.message}`);
         }
     }
+    async updateEmployeeAfterOperation(dto: CreateHrOperationDto, currentStatus: string): Promise<void> {
+        console.log('Updating employee after operation:', dto.type_action);
 
-    private async updateEmployeeAfterOperation(dto: CreateHrOperationDto, currentStatus: string): Promise<void> {
         const updateFields: any = {};
 
         switch (dto.type_action) {
@@ -93,8 +93,6 @@ export class HrOperationsService {
                 updateFields.current_salary = null;
                 break;
 
-
-
             case 'TRANSFER':
                 if (dto.department_id) updateFields.current_department_id = dto.department_id;
                 if (dto.position_id) updateFields.current_position_id = dto.position_id;
@@ -105,7 +103,7 @@ export class HrOperationsService {
                 if (dto.set_salary) updateFields.current_salary = dto.set_salary;
                 break;
         }
-
+        updateFields.updated_at = new Date();
 
         if (Object.keys(updateFields).length > 0) {
             const setClauses = [];
@@ -120,15 +118,15 @@ export class HrOperationsService {
                 }
             });
 
-            setClauses.push('updated_at = CURRENT_TIMESTAMP');
             values.push(dto.employee_id);
 
             const updateQuery = `
-        UPDATE employees 
-        SET ${setClauses.join(', ')}
-        WHERE id_employee = $${paramIndex}
-      `;
+                UPDATE employees 
+                SET ${setClauses.join(', ')}
+                WHERE id_employee = $${paramIndex}
+            `;
 
+            console.log('Update query:', updateQuery, values);
             await this.databaseService.query(updateQuery, values);
         }
     }
@@ -136,10 +134,19 @@ export class HrOperationsService {
     async findAll(): Promise<any[]> {
         try {
             const result = await this.databaseService.query(
-                `SELECT o.*, e.second_name, e.name, e.last_name 
-         FROM operation o
-         LEFT JOIN employees e ON o.employee_id = e.id_employee
-         ORDER BY o.created_at DESC`
+                `SELECT
+                     o.*,
+                     e.second_name,
+                     e.name,
+                     e.last_name,
+                     e.hr_status as employee_status,
+                     d.name as department_name,
+                     p.name as position_name
+                 FROM operation o
+                          LEFT JOIN employees e ON o.employee_id = e.id_employee
+                          LEFT JOIN department d ON o.department_id = d.id_department
+                          LEFT JOIN position p ON o.position_id = p.position_id
+                 ORDER BY o.created_at DESC`
             );
             return result.rows;
         } catch (error) {
@@ -151,7 +158,14 @@ export class HrOperationsService {
     async findByEmployeeId(employeeId: number): Promise<any[]> {
         try {
             const result = await this.databaseService.query(
-                'SELECT * FROM operation WHERE employee_id = $1 ORDER BY created_at DESC',
+                `SELECT o.*, 
+                    d.name as department_name,
+                    p.name as position_name
+                FROM operation o
+                LEFT JOIN department d ON o.department_id = d.id_department
+                LEFT JOIN position p ON o.position_id = p.position_id
+                WHERE o.employee_id = $1 
+                ORDER BY o.created_at DESC`,
                 [employeeId]
             );
             return result.rows;
@@ -160,43 +174,49 @@ export class HrOperationsService {
             return [];
         }
     }
-
     async getEmployeeCurrentState(employeeId: number): Promise<any> {
         try {
             const result = await this.databaseService.query(
-                `SELECT 
-          e.id_employee,
-          e.second_name,
-          e.name,
-          e.last_name,
-          e.hr_status,
-          e.current_department_id,
-          d.name as department_name,
-          e.current_position_id,
-          p.name as position_name,
-          e.current_salary
-        FROM employees e
-        LEFT JOIN departments d ON e.current_department_id = d.department_id
-        LEFT JOIN positions p ON e.current_position_id = p.position_id
-        WHERE e.id_employee = $1 AND e.deleted_at IS NULL`,
+                `SELECT
+                     e.id_employee,
+                     e.second_name,
+                     e.name,
+                     e.last_name,
+                     e.hr_status,
+                     e.current_department_id,
+                     d.name as department_name,
+                     e.current_position_id,
+                     p.name as position_name,
+                     e.current_salary               
+                 FROM employees e
+                          LEFT JOIN department d ON e.current_department_id = d.id_department
+                          LEFT JOIN position p ON e.current_position_id = p.position_id
+                 WHERE e.id_employee = $1 AND e.deleted_at IS NULL`,
                 [employeeId]
             );
 
             if (result.rows.length === 0) {
-                throw new BadRequestException(`Employee with ID ${employeeId} not found`);
+                return null;
             }
 
             return result.rows[0];
         } catch (error) {
             console.error('Error getting employee state:', error);
-            throw error;
+            return null;
         }
     }
 
     async findOne(id: number): Promise<any> {
         try {
             const result = await this.databaseService.query(
-                'SELECT * FROM operation WHERE id = $1',
+                `SELECT o.*, 
+                    e.second_name, 
+                    e.name, 
+                    e.last_name,
+                    e.hr_status as employee_status
+                FROM operation o
+                LEFT JOIN employees e ON o.employee_id = e.id_employee
+                WHERE o.id = $1`,
                 [id]
             );
 

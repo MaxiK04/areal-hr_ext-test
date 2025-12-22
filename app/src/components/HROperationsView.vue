@@ -137,11 +137,21 @@
           <label style="display: block; margin-bottom: 5px; font-weight: 500;">Отдел</label>
           <select
               v-model="newOperation.department_id"
+              @change="console.log('Выбран отдел:', newOperation.department_id)"
               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+              required
           >
             <option value="">Выберите отдел</option>
-            <option v-for="dept in departments" :key="dept.department_id" :value="dept.department_id">
-              {{ dept.name }}
+            <!--
+                Если первый отдел имеет id_department: 2,
+                то используем dept.id_department
+            -->
+            <option
+                v-for="dept in departments"
+                :key="dept.id_department"
+                :value="dept.id_department"
+            >
+              {{ dept.name }} (ID: {{ dept.id_department }})
             </option>
           </select>
         </div>
@@ -227,7 +237,10 @@ const isHireOperation = computed(() => {
 });
 
 const isNewEmployee = computed(() => {
-  return !currentEmployeeState.value || currentEmployeeState.value.hr_status === 'dismiss' || !currentEmployeeState.value.current_department_id;
+  return newOperation.value.type_action === 'HIRE' ||
+      !currentEmployeeState.value ||
+      currentEmployeeState.value.hr_status === 'dismiss' ||
+      !currentEmployeeState.value.current_department_id;
 });
 
 function getUserRole() {
@@ -267,7 +280,7 @@ async function loadOperations() {
 async function loadEmployees() {
   try {
     const token = localStorage.getItem('authToken');
-    const res = await fetch('http://localhost:3000/employees', {
+    const res = await fetch('http://localhost:3000/employees/with-details', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -294,6 +307,17 @@ async function loadDepartments() {
 
     if (res.ok) {
       departments.value = await res.json();
+      console.log('Загружены отделы (полная структура):', JSON.parse(JSON.stringify(departments.value)));
+      if (departments.value.length > 0) {
+        const firstDept = departments.value[0];
+        console.log('Ключи первого отдела:', Object.keys(firstDept));
+        console.log('Значения первого отдела:', {
+          id_department: firstDept.id_department,
+          department_id: firstDept.department_id,
+          id: firstDept.id,
+          allProperties: firstDept
+        });
+      }
     }
   } catch (err) {
     console.error('Ошибка загрузки отделов:', err);
@@ -332,28 +356,40 @@ async function getEmployeeCurrentState(employeeId) {
       const data = await res.json();
       currentEmployeeState.value = data;
 
-
       if (newOperation.value.type_action === 'HIRE' && isNewEmployee.value) {
         newOperation.value.department_id = '';
         newOperation.value.position_id = '';
         newOperation.value.set_salary = '';
       }
     } else {
-      currentEmployeeState.value = null;
+      currentEmployeeState.value = {
+        id_employee: employeeId,
+        hr_status: 'inactive',
+        current_department_id: null,
+        current_position_id: null,
+        current_salary: null
+      };
     }
   } catch (err) {
     console.error('Ошибка загрузки состояния сотрудника:', err);
-    currentEmployeeState.value = null;
+    currentEmployeeState.value = {
+      id_employee: employeeId,
+      hr_status: 'inactive',
+      current_department_id: null,
+      current_position_id: null,
+      current_salary: null
+    };
   }
 }
 
 async function createOperation() {
+  console.log('=== createOperation началось ===');
+  console.log('newOperation.value:', newOperation.value);
+  console.log('department_id перед отправкой:', newOperation.value.department_id);
   if (userRole.value !== 'admin') {
     error.value = 'Недостаточно прав для создания операции';
     return;
   }
-
-
   if (!newOperation.value.employee_id || !newOperation.value.type_action) {
     error.value = 'Выберите сотрудника и тип операции';
     return;
@@ -364,33 +400,45 @@ async function createOperation() {
     type_action: newOperation.value.type_action
   };
 
+  console.log('Создание операции:', newOperation.value); // Добавьте для отладки
   if (newOperation.value.type_action === 'HIRE') {
-    if (!newOperation.value.department_id || !newOperation.value.position_id || !newOperation.value.set_salary) {
+    console.log('HIRE - проверка полей:');
+    console.log('- department_id:', newOperation.value.department_id, 'type:', typeof newOperation.value.department_id);
+    console.log('- position_id:', newOperation.value.position_id, 'type:', typeof newOperation.value.position_id);
+    console.log('- set_salary:', newOperation.value.set_salary, 'type:', typeof newOperation.value.set_salary);
+
+
+    if (!newOperation.value.department_id ||
+        !newOperation.value.position_id ||
+        !newOperation.value.set_salary) {
+      console.log('ОШИБКА: одно из полей пустое!');
       error.value = 'Для приема на работу необходимо заполнить все поля: отдел, должность и зарплату';
       return;
     }
 
     operationData.department_id = parseInt(newOperation.value.department_id);
     operationData.position_id = parseInt(newOperation.value.position_id);
-    operationData.set_salary = parseInt(newOperation.value.set_salary);
+    operationData.set_salary = parseFloat(newOperation.value.set_salary);
+
+    console.log('operationData после преобразования:', operationData);
   }
   else if (newOperation.value.type_action === 'TRANSFER') {
     if (!newOperation.value.department_id && !newOperation.value.position_id && !newOperation.value.set_salary) {
       error.value = 'Для перевода укажите хотя бы одно поле: отдел, должность или зарплату';
       return;
     }
+
     if (newOperation.value.department_id) {
       operationData.department_id = parseInt(newOperation.value.department_id);
-    } else if (currentEmployeeState.value && currentEmployeeState.value.current_department_id) {
+    } else if (currentEmployeeState.value?.current_department_id) {
       operationData.department_id = currentEmployeeState.value.current_department_id;
     } else {
-
       operationData.department_id = 1;
     }
 
     if (newOperation.value.position_id) {
       operationData.position_id = parseInt(newOperation.value.position_id);
-    } else if (currentEmployeeState.value && currentEmployeeState.value.current_position_id) {
+    } else if (currentEmployeeState.value?.current_position_id) {
       operationData.position_id = currentEmployeeState.value.current_position_id;
     } else {
       operationData.position_id = 1;
@@ -398,7 +446,7 @@ async function createOperation() {
 
     if (newOperation.value.set_salary) {
       operationData.set_salary = parseInt(newOperation.value.set_salary);
-    } else if (currentEmployeeState.value && currentEmployeeState.value.current_salary) {
+    } else if (currentEmployeeState.value?.current_salary) {
       operationData.set_salary = currentEmployeeState.value.current_salary;
     } else {
       operationData.set_salary = 30000;
@@ -410,6 +458,7 @@ async function createOperation() {
       error.value = 'Для изменения зарплаты укажите новую зарплату';
       return;
     }
+
     if (currentEmployeeState.value) {
       operationData.department_id = currentEmployeeState.value.current_department_id || 1;
       operationData.position_id = currentEmployeeState.value.current_position_id || 1;
@@ -432,9 +481,10 @@ async function createOperation() {
       operationData.set_salary = 0;
     }
   }
-
   try {
     const token = localStorage.getItem('authToken');
+    console.log('Отправляемые данные:', operationData); // Добавьте для отладки
+
     const res = await fetch('http://localhost:3000/hr-operations', {
       method: 'POST',
       headers: {
@@ -540,7 +590,6 @@ function formatDate(dateString) {
   });
 }
 
-// Обработчики событий
 function onEmployeeChange() {
   if (newOperation.value.employee_id) {
     getEmployeeCurrentState(parseInt(newOperation.value.employee_id));
@@ -550,37 +599,44 @@ function onEmployeeChange() {
 }
 
 function onOperationTypeChange() {
-  if (currentEmployeeState.value) {
-    if (newOperation.value.type_action === 'HIRE') {
-      if (isNewEmployee.value) {
-        newOperation.value.department_id = '';
-        newOperation.value.position_id = '';
-        newOperation.value.set_salary = '';
-      } else {
-        newOperation.value.department_id = currentEmployeeState.value.current_department_id || '';
-        newOperation.value.position_id = currentEmployeeState.value.current_position_id || '';
-        newOperation.value.set_salary = currentEmployeeState.value.current_salary || '';
-      }
-    } else if (newOperation.value.type_action === 'TRANSFER') {
-      newOperation.value.department_id = currentEmployeeState.value.current_department_id || '';
-      newOperation.value.position_id = currentEmployeeState.value.current_position_id || '';
-      newOperation.value.set_salary = currentEmployeeState.value.current_salary || '';
-    } else if (newOperation.value.type_action === 'SALARY_CHANGE') {
+  const oldType = previousOperationType;
+  const currentType = newOperation.value.type_action;
+  const userSelectedDept = newOperation.value.department_id;
+  const userSelectedPos = newOperation.value.position_id;
+  const userSelectedSalary = newOperation.value.set_salary;
 
-      newOperation.value.set_salary = currentEmployeeState.value.current_salary || '';
-      newOperation.value.department_id = '';
-      newOperation.value.position_id = '';
-    } else if (newOperation.value.type_action === 'DISMISSAL') {
-      newOperation.value.department_id = '';
-      newOperation.value.position_id = '';
-      newOperation.value.set_salary = '';
+  if (currentEmployeeState.value) {
+    switch(currentType) {
+      case 'HIRE':
+        newOperation.value.department_id = userSelectedDept || '';
+        newOperation.value.position_id = userSelectedPos || '';
+        newOperation.value.set_salary = userSelectedSalary || '';
+        break;
+
+      case 'TRANSFER':
+        newOperation.value.department_id = userSelectedDept ||
+            currentEmployeeState.value.current_department_id || '';
+        newOperation.value.position_id = userSelectedPos ||
+            currentEmployeeState.value.current_position_id || '';
+        newOperation.value.set_salary = userSelectedSalary ||
+            currentEmployeeState.value.current_salary || '';
+        break;
+
+      case 'SALARY_CHANGE':
+        newOperation.value.department_id = userSelectedDept || '';
+        newOperation.value.position_id = userSelectedPos || '';
+        newOperation.value.set_salary = userSelectedSalary ||
+            currentEmployeeState.value.current_salary || '';
+        break;
+
+      case 'DISMISSAL':
+        break;
     }
-  } else {
-    newOperation.value.department_id = '';
-    newOperation.value.position_id = '';
-    newOperation.value.set_salary = '';
   }
+
+  previousOperationType = currentType;
 }
+let previousOperationType = '';
 
 function resetNewOperation() {
   newOperation.value = {

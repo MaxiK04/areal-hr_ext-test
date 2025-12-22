@@ -302,11 +302,10 @@ async function updateDepartment(department) {
       comment: department.editForm.comment || null
     };
 
-    console.log('Обновление отдела:', department.department_id, updateData);
+    console.log('Обновление отдела:', department.id_department, updateData);
 
     const token = localStorage.getItem('authToken');
-
-    const res = await fetch(`http://localhost:3000/departments/${department.department_id}`, {
+    const res = await fetch(`http://localhost:3000/departments/${department.id_department}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -350,8 +349,15 @@ async function deleteDepartment(department) {
 
   try {
     const token = localStorage.getItem('authToken');
+    const departmentId = department.id_department;
 
-    const res = await fetch(`http://localhost:3000/departments/${department.department_id}`, {
+    console.log('Удаление отдела, ID:', departmentId, 'Тип:', typeof departmentId);
+    const numericId = parseInt(departmentId);
+    if (isNaN(numericId)) {
+      throw new Error('Неверный ID отдела');
+    }
+
+    const res = await fetch(`http://localhost:3000/departments/${numericId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -363,8 +369,7 @@ async function deleteDepartment(department) {
       const data = await res.json();
       throw new Error(data.message || `Ошибка ${res.status}`);
     }
-
-    departments.value = departments.value.filter(d => d.department_id !== department.department_id);
+    departments.value = departments.value.filter(d => d.id_department !== department.id_department);
     success.value = `Отдел "${department.name}" удален`;
 
     setTimeout(() => {
@@ -372,7 +377,7 @@ async function deleteDepartment(department) {
     }, 2000);
 
   } catch (err) {
-    error.value = err.message;
+    error.value = `Ошибка удаления: ${err.message}`;
     console.error('Ошибка удаления:', err);
   }
 }
@@ -401,4 +406,3 @@ onMounted(() => {
   loadOrganizations();
 });
 </script>
-

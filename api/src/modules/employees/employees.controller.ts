@@ -11,6 +11,7 @@ import {
     UseGuards,
     Request
 } from '@nestjs/common';
+import { Public } from '../auth/decorators/public.decorator';
 import { EmployeesService } from './employees.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
@@ -24,14 +25,27 @@ import { RolesGuard } from '../auth/guard/roles.guard';
 export class EmployeesController {
     constructor(private readonly employeesService: EmployeesService) {}
 
-    @Get()
-    async findAll() {
-        return this.employeesService.findAll();
+    @Get('with-details')
+    @Public()
+    async findAllWithDetails() {
+        return this.employeesService.findAllWithDetails();
     }
 
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number) {
         return this.employeesService.findOne(id);
+    }
+
+    @Patch(':id/status')
+    async updateStatus(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateStatusDto: { hr_status: string },
+        @Request() req
+    ) {
+        const userId = req.user?.id || 0;
+        return this.employeesService.update(id, {
+            hr_status: updateStatusDto.hr_status
+        } as UpdateEmployeeDto, userId);
     }
 
     @Post()
@@ -57,7 +71,6 @@ export class EmployeesController {
         return this.employeesService.create(value, userId);
     }
 
-
     @Patch(':id')
     async update(
         @Param('id', ParseIntPipe) id: number,
@@ -73,8 +86,9 @@ export class EmployeesController {
         const userId = req.user?.id || 0;
         console.log('Update by user ID:', userId);
 
-        return this.employeesService.update(id, value, userId); //
+        return this.employeesService.update(id, value, userId);
     }
+
     @Delete(':id')
     async remove(
         @Param('id', ParseIntPipe) id: number,

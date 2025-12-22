@@ -10,20 +10,18 @@
         <button v-if="userRole === 'admin'" @click="showCreateModal = true" style="margin-right: 10px;">
           Добавить
         </button>
-        <button @click="loadUsers" :disabled="loading">
+        <button @click="loadEmployees" :disabled="loading">
           Обновить
         </button>
       </div>
     </div>
 
-
-    <div v-if="error" style="padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+    <div v-if="error" style="padding: 10px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #f5c6cb;">
       {{ error }}
     </div>
-    <div v-if="success" style="padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+    <div v-if="success" style="padding: 10px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #c3e6cb;">
       {{ success }}
     </div>
-
 
     <div style="overflow-x: auto;">
       <table style="width: 100%; border-collapse: collapse; min-width: 1200px;">
@@ -42,56 +40,11 @@
         <tbody>
         <tr v-for="employee in employees" :key="employee.id_employee" style="border-bottom: 1px solid #eee;">
           <td style="padding: 12px;">{{ employee.id_employee }}</td>
-          <td style="padding: 12px;">
-            <span v-if="!employee.editing">{{ employee.second_name }}</span>
-            <input
-                v-else
-                v-model="employee.editForm.second_name"
-                style="padding: 4px; border: 1px solid #ddd; border-radius: 4px; width: 100%;"
-            >
-          </td>
-          <td style="padding: 12px;">
-            <span v-if="!employee.editing">{{ employee.name }}</span>
-            <input
-                v-else
-                v-model="employee.editForm.name"
-                style="padding: 4px; border: 1px solid #ddd; border-radius: 4px; width: 100%;"
-            >
-          </td>
-          <td style="padding: 12px;">
-            <span v-if="!employee.editing">{{ employee.last_name || '-' }}</span>
-            <input
-                v-else
-                v-model="employee.editForm.last_name"
-                style="padding: 4px; border: 1px solid #ddd; border-radius: 4px; width: 100%;"
-            >
-          </td>
-          <td style="padding: 12px;">
-            <span v-if="!employee.editing">{{ formatDateForDisplay(employee.birth_date) }}</span>
-            <input
-                v-else
-                v-model="employee.editForm.birth_date"
-                type="date"
-                style="padding: 4px; border: 1px solid #ddd; border-radius: 4px; width: 100%;"
-            >
-          </td>
-          <td style="padding: 12px;">
-            <span v-if="!employee.editing">{{ formatPassport(employee) }}</span>
-            <div v-else>
-              <div style="display: flex; gap: 4px; margin-bottom: 4px;">
-                <input
-                    v-model="employee.editForm.passport_serial"
-                    placeholder="Серия"
-                    style="padding: 4px; border: 1px solid #ddd; border-radius: 4px; width: 70px;"
-                >
-                <input
-                    v-model="employee.editForm.passport_number"
-                    placeholder="Номер"
-                    style="padding: 4px; border: 1px solid #ddd; border-radius: 4px; width: 100px;"
-                >
-              </div>
-            </div>
-          </td>
+          <td style="padding: 12px;">{{ employee.second_name }}</td>
+          <td style="padding: 12px;">{{ employee.name }}</td>
+          <td style="padding: 12px;">{{ employee.last_name || '-' }}</td>
+          <td style="padding: 12px;">{{ formatDateForDisplay(employee.birth_date) }}</td>
+          <td style="padding: 12px;">{{ formatPassport(employee) }}</td>
           <td style="padding: 12px;">
               <span :style="getStatusStyle(employee.hr_status)">
                 {{ getStatusLabel(employee.hr_status) }}
@@ -100,29 +53,14 @@
           <td v-if="userRole === 'admin'" style="padding: 12px;">
             <div style="display: flex; gap: 8px;">
               <button
-                  v-if="!employee.editing"
-                  @click="startEditing(employee)"
-                  style="padding: 6px 12px; border: 1px;  cursor: pointer;"
+                  @click="openEditModal(employee)"
+                  style="padding: 6px 12px;cursor: pointer;"
               >
                 Редактировать
               </button>
-              <template v-else>
-                <button
-                    @click="saveEmployee(employee)"
-                    style="padding: 6px 12px; background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; border-radius: 4px;"
-                >
-                  Сохранить
-                </button>
-                <button
-                    @click="cancelEditing(employee)"
-                    style="padding: 6px 12px; background: #f5f5f5; color: #666; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;"
-                >
-                  Отмена
-                </button>
-              </template>
               <button
                   @click="deleteEmployee(employee)"
-                  style="padding: 6px 12px; background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;"
+                  style="padding: 6px 12px; background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; cursor: pointer;"
               >
                 Удалить
               </button>
@@ -140,6 +78,7 @@
     <div v-if="showCreateModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000;">
       <div style="background: white; padding: 30px; border-radius: 8px; width: 600px; max-height: 90vh; overflow-y: auto;">
         <h2 style="margin-top: 0; margin-bottom: 20px;">Новый сотрудник</h2>
+
         <h3 style="margin-bottom: 15px; color: #555;">Основная информация</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
           <div>
@@ -256,90 +195,174 @@
           <button
               @click="createEmployee"
               :disabled="!isValidNewEmployee"
-              style="padding: 8px 16px; background: #4CAF50; color: white; border: none;  cursor: pointer;">
+              style="padding: 8px 16px;cursor: pointer;">
             Создать
           </button>
         </div>
       </div>
     </div>
 
-
-    <div v-if="selectedEmployee" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1001;">
-      <div style="background: white; padding: 30px; border-radius: 8px; width: 700px; max-height: 90vh; overflow-y: auto;">
+    <div v-if="showEditModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1001;">
+      <div style="background: white; padding: 30px; border-radius: 8px; width: 600px; max-height: 90vh; overflow-y: auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h2 style="margin: 0;">
-            {{ selectedEmployee.second_name }} {{ selectedEmployee.name }} {{ selectedEmployee.last_name || '' }}
-          </h2>
+          <h2 style="margin: 0;">Редактирование сотрудника</h2>
           <button
-              @click="selectedEmployee = null"
-              style="background: none; border: none; font-size: 20px; color: #999; cursor: pointer;"
+              @click="closeEditModal"
+              style="background: none; border: none; font-size: 24px; color: #999; cursor: pointer; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;"
           >
             ×
           </button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <h3 style="margin-bottom: 15px; color: #555; border-bottom: 1px solid #eee; padding-bottom: 8px;">Основная информация</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
           <div>
-            <h3 style="margin-bottom: 15px; color: #555;">Личные данные</h3>
-            <div style="margin-bottom: 10px;">
-              <strong>Дата рождения:</strong> {{ formatDateForDisplay(selectedEmployee.birth_date) }}
-            </div>
-            <div style="margin-bottom: 10px;">
-              <strong>Статус:</strong>
-              <span :style="getStatusStyle(selectedEmployee.hr_status)">
-                {{ getStatusLabel(selectedEmployee.hr_status) }}
-              </span>
-            </div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Фамилия *</label>
+            <input
+                v-model="editForm.second_name"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
           </div>
-
           <div>
-            <h3 style="margin-bottom: 15px; color: #555;">Паспортные данные</h3>
-            <div style="margin-bottom: 5px;">
-              <strong>Серия/Номер:</strong> {{ selectedEmployee.passport_serial }} {{ selectedEmployee.passport_number }}
-            </div>
-            <div style="margin-bottom: 5px;">
-              <strong>Дата выдачи:</strong> {{ formatDateForDisplay(selectedEmployee.passport_date) }}
-            </div>
-            <div style="margin-bottom: 5px;">
-              <strong>Код подразделения:</strong> {{ selectedEmployee.passport_code }}
-            </div>
-            <div style="margin-bottom: 5px;">
-              <strong>Кем выдан:</strong> {{ selectedEmployee.passport_by }}
-            </div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Имя *</label>
+            <input
+                v-model="editForm.name"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
           </div>
-
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Отчество</label>
+            <input
+                v-model="editForm.last_name"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+            >
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Дата рождения *</label>
+            <input
+                v-model="editForm.birth_date"
+                type="date"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
+          </div>
+        </div>
+        <h3 style="margin-bottom: 15px; color: #555; border-bottom: 1px solid #eee; padding-bottom: 8px;">Паспортные данные</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Серия паспорта *</label>
+            <input
+                v-model="editForm.passport_serial"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Номер паспорта *</label>
+            <input
+                v-model="editForm.passport_number"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Дата выдачи *</label>
+            <input
+                v-model="editForm.passport_date"
+                type="date"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Код подразделения *</label>
+            <input
+                v-model="editForm.passport_code"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                placeholder="000-000"
+                required
+            >
+          </div>
           <div style="grid-column: span 2;">
-            <h3 style="margin-bottom: 15px; color: #555;">Адрес регистрации</h3>
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 4px;">
-              {{ formatAddress(selectedEmployee) }}
-            </div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Кем выдан *</label>
+            <input
+                v-model="editForm.passport_by"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
           </div>
-
-          <div v-if="selectedEmployee.hr_status === 'active'" style="grid-column: span 2;">
-            <h3 style="margin-bottom: 15px; color: #555;">Текущие данные</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
-              <div>
-                <strong>Отдел:</strong> {{ selectedEmployee.current_department_id || 'Не назначен' }}
-              </div>
-              <div>
-                <strong>Должность:</strong> {{ selectedEmployee.current_position_id || 'Не назначена' }}
-              </div>
-              <div>
-                <strong>Зарплата:</strong>
-                {{ selectedEmployee.current_salary ? formatCurrency(selectedEmployee.current_salary) : 'Не установлена' }}
-              </div>
-            </div>
+        </div>
+        <h3 style="margin-bottom: 15px; color: #555; border-bottom: 1px solid #eee; padding-bottom: 8px;">Адрес регистрации</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Регион *</label>
+            <input
+                v-model="editForm.registration_region"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Город *</label>
+            <input
+                v-model="editForm.registration_city"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Улица *</label>
+            <input
+                v-model="editForm.registration_street"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Дом *</label>
+            <input
+                v-model="editForm.registration_house"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                required
+            >
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Корпус</label>
+            <input
+                v-model="editForm.registration_korp"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+            >
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 5px; font-weight: 500;">Квартира</label>
+            <input
+                v-model="editForm.registration_apart"
+                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+            >
           </div>
         </div>
 
-        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
           <button
-              @click="selectedEmployee = null"
-              style="padding: 8px 16px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer;">
-            Закрыть
+              @click="closeEditModal"
+              style="padding: 10px 20px; background: #f5f5f5; color: #666; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-weight: 500;"
+          >
+            Отмена
+          </button>
+          <button
+              @click="saveEditForm"
+              :disabled="!isValidEditForm"
+              style="padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;"
+          >
+            Сохранить изменения
           </button>
         </div>
       </div>
+    </div>
+
+    <div v-if="selectedEmployee" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1002;">
     </div>
   </div>
 </template>
@@ -352,6 +375,7 @@ const loading = ref(false);
 const error = ref('');
 const success = ref('');
 const showCreateModal = ref(false);
+const showEditModal = ref(false);
 const selectedEmployee = ref(null);
 const userRole = ref('user');
 
@@ -373,6 +397,61 @@ const newEmployee = ref({
   registration_apart: ''
 });
 
+const editForm = ref({
+  id_employee: null,
+  second_name: '',
+  name: '',
+  last_name: '',
+  birth_date: '',
+  passport_serial: '',
+  passport_number: '',
+  passport_date: '',
+  passport_code: '',
+  passport_by: '',
+  registration_region: '',
+  registration_city: '',
+  registration_street: '',
+  registration_house: '',
+  registration_korp: '',
+  registration_apart: ''
+});
+
+function getUserRole() {
+  try {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      return parsed.role || 'user';
+    }
+  } catch (e) {
+    console.error('Ошибка при получении роли:', e);
+  }
+  return 'user';
+}
+
+async function loadEmployees() {
+  loading.value = true;
+  error.value = '';
+  try {
+    const token = localStorage.getItem('authToken');
+    const res = await fetch('http://localhost:3000/employees/with-details', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!res.ok) throw new Error(`Ошибка загрузки: ${res.status}`);
+
+    const data = await res.json();
+    employees.value = data;
+
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value = false;
+  }
+}
 
 function formatDateToDDMMYYYY(dateString) {
   if (!dateString) return '';
@@ -396,7 +475,6 @@ function formatDateToYYYYMMDD(dateString) {
     return dateString;
   }
 
-
   const parts = dateString.split('.');
   if (parts.length === 3) {
     const [day, month, year] = parts;
@@ -408,79 +486,160 @@ function formatDateToYYYYMMDD(dateString) {
 
 function formatDateForDisplay(dateString) {
   if (!dateString) return '-';
-
-  if (dateString.includes('.')) {
-    return dateString;
-  }
-
-  try {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
-  } catch (e) {
-    return dateString;
-  }
+  const dateOnly = dateString.split('T')[0];
+  const [year, month, day] = dateOnly.split('-');
+  return `${day}.${month}.${year}`;
 }
 
-const isValidNewEmployee = computed(() => {
-  const emp = newEmployee.value;
-  return emp.second_name &&
-      emp.name &&
-      emp.birth_date &&
-      emp.passport_serial &&
-      emp.passport_number &&
-      emp.passport_date &&
-      emp.passport_code &&
-      emp.passport_by &&
-      emp.registration_region &&
-      emp.registration_city &&
-      emp.registration_street &&
-      emp.registration_house;
+function openEditModal(employee) {
+  console.log('Открытие модального окна для:', employee);
+  function convertDateForInput(dateStr) {
+    if (!dateStr) return '';
+
+    if (dateStr.includes('.')) {
+      const parts = dateStr.split('.');
+      if (parts.length === 3) {
+        const [day, month, year] = parts;
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      }
+    }
+    return dateStr;
+  }
+
+  editForm.value = {
+    id_employee: employee.id_employee,
+    second_name: employee.second_name,
+    name: employee.name,
+    last_name: employee.last_name || '',
+    birth_date: convertDateForInput(employee.birth_date),
+    passport_serial: employee.passport_serial,
+    passport_number: employee.passport_number,
+    passport_date: convertDateForInput(employee.passport_date),
+    passport_code: employee.passport_code || '',
+    passport_by: employee.passport_by,
+    registration_region: employee.registration_region,
+    registration_city: employee.registration_city,
+    registration_street: employee.registration_street,
+    registration_house: employee.registration_house,
+    registration_korp: employee.registration_korp || '',
+    registration_apart: employee.registration_apart || ''
+  };
+
+  showEditModal.value = true;
+}
+
+
+function closeEditModal() {
+  showEditModal.value = false;
+  editForm.value = {
+    id_employee: null,
+    second_name: '',
+    name: '',
+    last_name: '',
+    birth_date: '',
+    passport_serial: '',
+    passport_number: '',
+    passport_date: '',
+    passport_code: '',
+    passport_by: '',
+    registration_region: '',
+    registration_city: '',
+    registration_street: '',
+    registration_house: '',
+    registration_korp: '',
+    registration_apart: ''
+  };
+}
+
+
+const isValidEditForm = computed(() => {
+  const form = editForm.value;
+  return form.second_name &&
+      form.name &&
+      form.birth_date &&
+      form.passport_serial &&
+      form.passport_number &&
+      form.passport_date &&
+      form.passport_code &&
+      form.passport_by &&
+      form.registration_region &&
+      form.registration_city &&
+      form.registration_street &&
+      form.registration_house;
 });
 
-function getUserRole() {
-  try {
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      const parsed = JSON.parse(userData);
-      return parsed.role || 'user';
-    }
-  } catch (e) {
-    console.error('Ошибка при получении роли:', e);
-  }
-  return 'user';
-}
 
-async function loadEmployees() {
-  loading.value = true;
-  error.value = '';
+async function saveEditForm() {
+  if (!editForm.value.id_employee) return;
+
+  if (userRole.value !== 'admin') {
+    error.value = 'Недостаточно прав для редактирования сотрудника';
+    return;
+  }
+
   try {
+    if (editForm.value.passport_code && editForm.value.passport_code.length !== 7) {
+      error.value = 'Код подразделения должен содержать 7 символов (например: 123-456)';
+      return;
+    }
+
+    const updateData = {
+      second_name: editForm.value.second_name,
+      name: editForm.value.name,
+      last_name: editForm.value.last_name || null,
+      birth_date: formatDateToDDMMYYYY(editForm.value.birth_date),
+      passport_serial: editForm.value.passport_serial,
+      passport_number: editForm.value.passport_number,
+      passport_date: formatDateToDDMMYYYY(editForm.value.passport_date),
+      passport_code: editForm.value.passport_code,
+      passport_by: editForm.value.passport_by,
+      registration_region: editForm.value.registration_region,
+      registration_city: editForm.value.registration_city,
+      registration_street: editForm.value.registration_street,
+      registration_house: editForm.value.registration_house,
+      registration_korp: editForm.value.registration_korp || null,
+      registration_apart: editForm.value.registration_apart || null
+    };
+
+    console.log('Отправляемые данные для обновления:', updateData);
     const token = localStorage.getItem('authToken');
-    const res = await fetch('http://localhost:3000/employees', {
+    const res = await fetch(`http://localhost:3000/employees/${editForm.value.id_employee}`, {
+      method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify(updateData)
     });
-
-    if (!res.ok) throw new Error(`Ошибка загрузки: ${res.status}`);
-
     const data = await res.json();
-    employees.value = data.map(emp => ({
-      ...emp,
-      editing: false,
-      editForm: null
-    }));
+    console.log('Ответ сервера:', data);
+    if (!res.ok) {
+      throw new Error(data.message || `Ошибка ${res.status}`);
+    }
+
+    const index = employees.value.findIndex(emp => emp.id_employee === editForm.value.id_employee);
+    if (index !== -1) {
+      employees.value[index] = {
+        ...employees.value[index],
+        ...updateData,
+        birth_date: formatDateToDDMMYYYY(editForm.value.birth_date),
+        passport_date: formatDateToDDMMYYYY(editForm.value.passport_date)
+      };
+    }
+
+    success.value = 'Данные сотрудника успешно обновлены';
+    closeEditModal();
+
+    setTimeout(() => {
+      success.value = '';
+    }, 3000);
 
   } catch (err) {
     error.value = err.message;
-  } finally {
-    loading.value = false;
+    console.error('Ошибка обновления сотрудника:', err);
+    console.error('Полная ошибка:', err.stack);
   }
 }
-
 
 async function createEmployee() {
   if (userRole.value !== 'admin') {
@@ -534,113 +693,6 @@ async function createEmployee() {
 }
 
 
-async function updateEmployee(employee) {
-  if (userRole.value !== 'admin') {
-    error.value = 'Недостаточно прав для обновления сотрудника';
-    return;
-  }
-
-  try {
-    const updateData = {};
-
-    if (employee.editForm.second_name !== employee.second_name) {
-      updateData.second_name = employee.editForm.second_name;
-    }
-    if (employee.editForm.name !== employee.name) {
-      updateData.name = employee.editForm.name;
-    }
-    if (employee.editForm.last_name !== employee.last_name) {
-      updateData.last_name = employee.editForm.last_name || null;
-    }
-
-
-    const formattedBirthDate = formatDateToDDMMYYYY(employee.editForm.birth_date);
-    if (formattedBirthDate !== employee.birth_date) {
-      updateData.birth_date = formattedBirthDate;
-    }
-    if (employee.editForm.passport_serial !== employee.passport_serial) {
-      updateData.passport_serial = employee.editForm.passport_serial;
-    }
-    if (employee.editForm.passport_number !== employee.passport_number) {
-      updateData.passport_number = employee.editForm.passport_number;
-    }
-
-    const formattedPassportDate = formatDateToDDMMYYYY(employee.editForm.passport_date);
-    if (formattedPassportDate !== employee.passport_date) {
-      updateData.passport_date = formattedPassportDate;
-    }
-
-    if (employee.editForm.passport_code !== employee.passport_code) {
-      if (employee.editForm.passport_code && employee.editForm.passport_code.length !== 7) {
-        error.value = 'Код подразделения должен содержать 7 символов (например: 123-456)';
-        return;
-      }
-      updateData.passport_code = employee.editForm.passport_code;
-    }
-
-    if (employee.editForm.passport_by !== employee.passport_by) {
-      updateData.passport_by = employee.editForm.passport_by;
-    }
-
-    if (employee.editForm.registration_region !== employee.registration_region) {
-      updateData.registration_region = employee.editForm.registration_region;
-    }
-    if (employee.editForm.registration_city !== employee.registration_city) {
-      updateData.registration_city = employee.editForm.registration_city;
-    }
-    if (employee.editForm.registration_street !== employee.registration_street) {
-      updateData.registration_street = employee.editForm.registration_street;
-    }
-    if (employee.editForm.registration_house !== employee.registration_house) {
-      updateData.registration_house = employee.editForm.registration_house;
-    }
-    if (employee.editForm.registration_korp !== employee.registration_korp) {
-      updateData.registration_korp = employee.editForm.registration_korp || null;
-    }
-    if (employee.editForm.registration_apart !== employee.registration_apart) {
-      updateData.registration_apart = employee.editForm.registration_apart || null;
-    }
-
-    if (Object.keys(updateData).length === 0) {
-      employee.editing = false;
-      employee.editForm = null;
-      return;
-    }
-
-    const token = localStorage.getItem('authToken');
-    const res = await fetch(`http://localhost:3000/employees/${employee.id_employee}`, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updateData)
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || `Ошибка ${res.status}`);
-    }
-
-
-    Object.assign(employee, data);
-    employee.editing = false;
-    employee.editForm = null;
-
-    success.value = `Данные сотрудника обновлены`;
-
-    setTimeout(() => {
-      success.value = '';
-    }, 2000);
-
-  } catch (err) {
-    error.value = err.message;
-    console.error('Ошибка обновления сотрудника:', err);
-    console.error('Отправленные данные:', employee.editForm);
-  }
-}
-
 async function deleteEmployee(employee) {
   if (userRole.value !== 'admin') {
     error.value = 'Недостаточно прав для удаления сотрудника';
@@ -676,36 +728,6 @@ async function deleteEmployee(employee) {
   }
 }
 
-function startEditing(employee) {
-  employee.editing = true;
-  employee.editForm = {
-    second_name: employee.second_name,
-    name: employee.name,
-    last_name: employee.last_name || '',
-    birth_date: formatDateToYYYYMMDD(employee.birth_date),
-    passport_serial: employee.passport_serial,
-    passport_number: employee.passport_number,
-    passport_date: formatDateToYYYYMMDD(employee.passport_date),
-    passport_code: employee.passport_code || '',
-    passport_by: employee.passport_by,
-    registration_region: employee.registration_region,
-    registration_city: employee.registration_city,
-    registration_street: employee.registration_street,
-    registration_house: employee.registration_house,
-    registration_korp: employee.registration_korp || '',
-    registration_apart: employee.registration_apart || ''
-  };
-}
-
-function saveEmployee(employee) {
-  updateEmployee(employee);
-}
-
-function cancelEditing(employee) {
-  employee.editing = false;
-  employee.editForm = null;
-}
-
 function getStatusLabel(status) {
   const labels = {
     'active': 'Активен',
@@ -718,10 +740,10 @@ function getStatusLabel(status) {
 
 function getStatusStyle(status) {
   const styles = {
-    'active': 'padding: 4px 8px; border-radius: 4px;',
-    'dismiss': 'padding: 4px 8px; border-radius: 4px;',
-    'on_vacation': 'padding: 4px 8px; border-radius: 4px;',
-    'sick_leave': ' padding: 4px 8px; border-radius: 4px;'
+    'active': 'color: #2e7d32; background-color: #e8f5e9; padding: 4px 8px; border-radius: 4px; font-weight: 500;',
+    'dismiss': 'color: #c62828; background-color: #ffebee; padding: 4px 8px; border-radius: 4px; font-weight: 500;',
+    'on_vacation': 'color: #f57c00; background-color: #fff3e0; padding: 4px 8px; border-radius: 4px; font-weight: 500;',
+    'sick_leave': 'color: #6a1b9a; background-color: #f3e5f5; padding: 4px 8px; border-radius: 4px; font-weight: 500;'
   };
   return styles[status] || '';
 }
@@ -746,6 +768,22 @@ function formatCurrency(amount) {
   }).format(amount);
 }
 
+const isValidNewEmployee = computed(() => {
+  const emp = newEmployee.value;
+  return emp.second_name &&
+      emp.name &&
+      emp.birth_date &&
+      emp.passport_serial &&
+      emp.passport_number &&
+      emp.passport_date &&
+      emp.passport_code &&
+      emp.passport_by &&
+      emp.registration_region &&
+      emp.registration_city &&
+      emp.registration_street &&
+      emp.registration_house;
+});
+
 function resetNewEmployee() {
   newEmployee.value = {
     second_name: '',
@@ -765,7 +803,6 @@ function resetNewEmployee() {
     registration_apart: ''
   };
 }
-
 
 onMounted(() => {
   userRole.value = getUserRole();

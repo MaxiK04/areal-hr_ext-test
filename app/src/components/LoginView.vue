@@ -34,7 +34,7 @@ async function handleLogin() {
           id: data.user.id || data.user.id_user,
           login: data.user.login,
           name: data.user.name,
-          role: data.user.role, // ← КЛЮЧЕВОЕ ПОЛЕ
+          role: data.user.role,
           second_name: data.user.second_name || ''
         }));
         console.log('Данные пользователя с ролью сохранены:', data.user);

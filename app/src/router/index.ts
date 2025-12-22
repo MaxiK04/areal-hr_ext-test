@@ -9,6 +9,9 @@ import PositionsView from '../components/PositionsView.vue'
 import DepartmentsView from '../components/DepartmentsView.vue'
 import OrganizationsView from '../components/OrganizationsView.vue'
 import HROperationsView from '../components/HROperationsView.vue'
+import LogsView from '../components/LogsView.vue'
+import FilesView from '../components/FilesView.vue'
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -47,6 +50,16 @@ const router = createRouter({
         {
             path: '/hr-operations',
             component: HROperationsView,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/logs',
+            component: LogsView,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/files',
+            component: FilesView,
             meta: { requiresAuth: true }
         }
     ]

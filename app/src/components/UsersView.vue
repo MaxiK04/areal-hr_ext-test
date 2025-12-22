@@ -82,7 +82,6 @@
           <button
               @click="createUser"
               :disabled="!newUser.login || !newUser.password"
-              style="background: #2196f3; color: white;"
           >
             Создать
           </button>

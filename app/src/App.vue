@@ -24,6 +24,12 @@
         <button @click="$router.push('/hr-operations')" :class="{ active: $route.path === '/hr-operations' }">
           HR-Operations
         </button>
+        <button @click="$router.push('/logs')" :class="{ active: $route.path === '/logs' }">
+          Логи
+        </button>
+        <button @click="$router.push('/files')" :class="{ active: $route.path === '/files' }">
+          Файлы
+        </button>
         <div style="margin-left: auto;">
           <button @click="logout" style="background: #dc3545; color: white;">
             Выйти
